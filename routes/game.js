@@ -35,6 +35,16 @@ module.exports = function()
 			broadcastToAll("other-motion",data);
 		});
 
+		socket.on('user-mousedown', function(data) {
+			socket.game_id = data.id;
+			broadcastToAll("other-mousedown",data);
+		});
+
+		socket.on('user-mouseup', function(data) {
+			socket.game_id = data.id;
+			broadcastToAll("other-mouseup",data);
+		});
+
 		//broad cast connection status
 		function dispatchStatus(){
 			//var i=0; for (p in participants_con) i++;

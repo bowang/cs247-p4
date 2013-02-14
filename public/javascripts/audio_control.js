@@ -1,7 +1,7 @@
 var ad_context; // this is the audio context
 var buffer_loader; // object contaning all buffer of sounds
+var buffer_list_playable;
 var local_buffer_player;
-var local_buffer_list_playable;
 var local_sound_interval_timeout;
 var local_sound_choice = 0;
 // sound source has all the sounds for the app
@@ -61,8 +61,7 @@ var socket;
 var my_id = Math.random().toString(36).substring(7);
 
 // for other players connected to the game
-var other_player_sound_interval_timeout = {};
-var other_player_mouse_coord = {};
+var other_player_info = {}; // contains information for other players including sound choice, time interval, buffer player, and mouse coord
 
 function create_audio_context(){
   try {
@@ -80,15 +79,15 @@ function create_audio_context(){
 // trigger then buffer of all audio clips are loaded completely
 function buffer_loading_finished(bufferList) {
   console.log("Buffer loader compplete - loaded " + sound_source.length + " sounds");
-  local_buffer_list_playable = bufferList;
+  buffer_list_playable = bufferList;
   $("#loading").fadeOut();
   initialize_socket();
   attach_mouse_events();
   attach_key_events();
 }
 
-// play a particular sound clip
-function play(playlist,index){
+// play a particular sound clip with a playlist, and the index in the playlist
+function local_play(playlist,index){
   if(typeof local_buffer_player !== "undefined"){
     local_buffer_player.stop(0);
   }
@@ -98,17 +97,28 @@ function play(playlist,index){
   local_buffer_player.start(0);
 }
 
-// play the music stream
+// play a particular sound clip for a remote player with a playlist, and the index in the playlist
+function remote_play(player_id, playlist,index){
+  if(typeof other_player_info[player_id].player !== "undefined"){
+    other_player_info[player_id].player.stop(0);
+  }
+  other_player_info[player_id].player = ad_context.createBufferSource();
+  other_player_info[player_id].player.buffer = playlist[index];
+  other_player_info[player_id].player.connect(ad_context.destination);
+  other_player_info[player_id].player.start(0);
+}
+
+// play the music stream for local player
 function local_player_play_stream(){
   // first play once then setup interval to avoid delay
-  play(local_buffer_list_playable,local_sound_choice*16+Math.floor(16*mouse_doc_y/document_height));
+  local_play(buffer_list_playable,local_sound_choice*16+Math.floor(16*mouse_doc_y/document_height));
   local_sound_interval_timeout = setInterval(function(){
-    play(local_buffer_list_playable,local_sound_choice*16+Math.floor(16*mouse_doc_y/document_height));
+    local_play(buffer_list_playable,local_sound_choice*16+Math.floor(16*mouse_doc_y/document_height));
   },170);
 }
 
 // clear music
-function clear_sound_time_out(){
+function clear_local_sound_time_out(){
   window.clearInterval(local_sound_interval_timeout);
 }
 
@@ -120,15 +130,17 @@ function attach_mouse_events(){
     mouse_doc_x = e.pageX;
     mouse_doc_y = e.pageY;
     $("#my_circle").css({top:mouse_doc_y-10,left:mouse_doc_x-10});
-    socket.emit('user-motion', {id:my_id,x:mouse_doc_x,y:mouse_doc_y});
+    socket.emit('user-motion', {id:my_id,x:mouse_doc_x,y:mouse_doc_y,choice:local_sound_choice});
   });
   $(document).mousedown(function(e){
     console.log("mouse down");
+    socket.emit('user-mousedown', {id:my_id,x:mouse_doc_x,y:mouse_doc_y,choice:local_sound_choice});
     local_player_play_stream();
   });
   $(document).mouseup(function(e){
     console.log("mouse up");
-    clear_sound_time_out();
+    socket.emit('user-mouseup', {id:my_id,x:mouse_doc_x,y:mouse_doc_y,choice:local_sound_choice});
+    clear_local_sound_time_out();
   });
 }
 
@@ -162,23 +174,31 @@ function initialize_socket(){
     if($("#"+data.id).length == 0){
       $("body").append("<div id='"+data.id+"' class='other_circle'></div>")
     }
-    if(typeof other_player_mouse_coord[data.id] === "undefined"){
-      other_player_mouse_coord[data.id] = {x:0,y:0};
+    if(typeof other_player_info[data.id] === "undefined"){
+      other_player_info[data.id] = {};
     }
-    other_player_mouse_coord[data.id].x = data.x;
-    other_player_mouse_coord[data.id].y = data.y;
+    other_player_info[data.id].x = data.x;
+    other_player_info[data.id].y = data.y;
     $("#"+data.id).css({top:data.y,left:data.x});
   });
   socket.on('other-disconnect', function (data) {
     // data is the id here
     $("#"+data).fadeOut();
-    delete other_player_mouse_coord[data];
+    delete other_player_info[data];
   });
   socket.on('other-mousedown', function (data) {
-    other_player_play_stream();
+    if(typeof other_player_info[data.id] === "undefined"){
+      other_player_info[data.id] = {};
+    }
+    other_player_info[data.id].choice = data.choice;
+    // TODO: play sound once
+    other_player_info[data.id].interval = setInterval(function(){
+      remote_play(data.id,buffer_list_playable,other_player_info[data.id].choice*16+Math.floor(16*other_player_info[data.id].y/document_height));
+    },170);
+
   });
   socket.on('other-mouseup', function (data) {
-    other_player_clear_sound_time_out();
+    window.clearInterval(other_player_info[data.id].interval);
   });
 }
 

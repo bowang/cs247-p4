@@ -179,6 +179,7 @@ function initialize_socket(){
     }
     other_player_info[data.id].x = data.x;
     other_player_info[data.id].y = data.y;
+    other_player_info[data.id].choice = data.choice;
     $("#"+data.id).css({top:data.y,left:data.x});
   });
   socket.on('other-disconnect', function (data) {
@@ -192,6 +193,7 @@ function initialize_socket(){
     }
     other_player_info[data.id].choice = data.choice;
     // TODO: play sound once
+    remote_play(data.id,buffer_list_playable,other_player_info[data.id].choice*16+Math.floor(16*other_player_info[data.id].y/document_height));
     other_player_info[data.id].interval = setInterval(function(){
       remote_play(data.id,buffer_list_playable,other_player_info[data.id].choice*16+Math.floor(16*other_player_info[data.id].y/document_height));
     },170);

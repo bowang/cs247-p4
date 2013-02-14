@@ -3,6 +3,7 @@ var buffer_loader; // object contaning all buffer of sounds
 var local_buffer_player;
 var local_buffer_list_playable;
 var local_sound_interval_timeout;
+var local_sound_choice = 0;
 // sound source has all the sounds for the app
 var sound_source = [
       'sound/bziaou_1.ogg',
@@ -37,6 +38,22 @@ var sound_source = [
       'sound/syntklocka_stab_14.ogg',
       'sound/syntklocka_stab_15.ogg',
       'sound/syntklocka_stab_16.ogg',
+      'sound/8bit_stab_1.ogg',
+      'sound/8bit_stab_2.ogg',
+      'sound/8bit_stab_3.ogg',
+      'sound/8bit_stab_4.ogg',
+      'sound/8bit_stab_5.ogg',
+      'sound/8bit_stab_6.ogg',
+      'sound/8bit_stab_7.ogg',
+      'sound/8bit_stab_8.ogg',
+      'sound/8bit_stab_9.ogg',
+      'sound/8bit_stab_10.ogg',
+      'sound/8bit_stab_11.ogg',
+      'sound/8bit_stab_12.ogg',
+      'sound/8bit_stab_13.ogg',
+      'sound/8bit_stab_14.ogg',
+      'sound/8bit_stab_15.ogg',
+      'sound/8bit_stab_16.ogg'
     ];
 var document_height;
 var mouse_doc_x, mouse_doc_y;
@@ -67,6 +84,7 @@ function buffer_loading_finished(bufferList) {
   $("#loading").fadeOut();
   initialize_socket();
   attach_mouse_events();
+  attach_key_events();
 }
 
 // play a particular sound clip
@@ -83,8 +101,10 @@ function play(playlist,index){
 // play the music stream
 function local_player_play_stream(){
   // first play once then setup interval to avoid delay
-  play(local_buffer_list_playable,Math.floor(16*mouse_doc_y/document_height));
-  local_sound_interval_timeout = setInterval(function(){play(local_buffer_list_playable,Math.floor(16*mouse_doc_y/document_height));},170);
+  play(local_buffer_list_playable,local_sound_choice*16+Math.floor(16*mouse_doc_y/document_height));
+  local_sound_interval_timeout = setInterval(function(){
+    play(local_buffer_list_playable,local_sound_choice*16+Math.floor(16*mouse_doc_y/document_height));
+  },170);
 }
 
 // clear music
@@ -109,6 +129,29 @@ function attach_mouse_events(){
   $(document).mouseup(function(e){
     console.log("mouse up");
     clear_sound_time_out();
+  });
+}
+
+// attach keyboard event to the dom
+function attach_key_events(){
+  $(document).keypress(function(e) {
+    console.log("Key pressed: " + e.which);
+    $(".select_sound").removeClass("sel_highlighted");
+    switch(e.which){
+      case 49:
+        local_sound_choice = 0;
+        $("#sound_1").addClass("sel_highlighted");
+        break;
+      case 50:
+        local_sound_choice = 1;
+        $("#sound_2").addClass("sel_highlighted");
+        break;
+      case 51:
+        local_sound_choice = 2;
+        $("#sound_3").addClass("sel_highlighted");
+        break;
+      default:
+    }
   });
 }
 

@@ -27,3 +27,12 @@ body{
     top:0;
     left: 0;
 }
+.select_sound{
+	padding: 5px;
+	border: 1px solid #CCC;
+	display: inline-block;
+	margin: 5px;
+}
+.sel_highlighted{
+	background: #EEE;
+}

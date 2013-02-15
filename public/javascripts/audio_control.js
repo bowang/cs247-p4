@@ -53,7 +53,39 @@ var sound_source = [
       'sound/8bit_stab_13.ogg',
       'sound/8bit_stab_14.ogg',
       'sound/8bit_stab_15.ogg',
-      'sound/8bit_stab_16.ogg'
+      'sound/8bit_stab_16.ogg',
+      'sound/bassdist_1.ogg',
+      'sound/bassdist_2.ogg',
+      'sound/bassdist_3.ogg',
+      'sound/bassdist_4.ogg',
+      'sound/bassdist_5.ogg',
+      'sound/bassdist_6.ogg',
+      'sound/bassdist_7.ogg',
+      'sound/bassdist_8.ogg',
+      'sound/bassdist_9.ogg',
+      'sound/bassdist_10.ogg',
+      'sound/bassdist_11.ogg',
+      'sound/bassdist_12.ogg',
+      'sound/bassdist_13.ogg',
+      'sound/bassdist_14.ogg',
+      'sound/bassdist_15.ogg',
+      'sound/bassdist_16.ogg',
+      'sound/syntklocka_stab_1.ogg',
+      'sound/syntklocka_stab_2.ogg',
+      'sound/syntklocka_stab_3.ogg',
+      'sound/syntklocka_stab_4.ogg',
+      'sound/syntklocka_stab_5.ogg',
+      'sound/syntklocka_stab_6.ogg',
+      'sound/syntklocka_stab_7.ogg',
+      'sound/syntklocka_stab_8.ogg',
+      'sound/syntklocka_stab_9.ogg',
+      'sound/syntklocka_stab_10.ogg',
+      'sound/syntklocka_stab_11.ogg',
+      'sound/syntklocka_stab_12.ogg',
+      'sound/syntklocka_stab_13.ogg',
+      'sound/syntklocka_stab_14.ogg',
+      'sound/syntklocka_stab_15.ogg',
+      'sound/syntklocka_stab_16.ogg'
     ];
 var document_height;
 var mouse_doc_x, mouse_doc_y;
@@ -161,6 +193,14 @@ function attach_key_events(){
       case 51:
         local_sound_choice = 2;
         $("#sound_3").addClass("sel_highlighted");
+        break;
+      case 52:
+        local_sound_choice = 3;
+        $("#sound_4").addClass("sel_highlighted");
+        break;
+      case 53:
+        local_sound_choice = 4;
+        $("#sound_5").addClass("sel_highlighted");
         break;
       default:
     }

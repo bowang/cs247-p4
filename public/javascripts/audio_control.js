@@ -143,9 +143,9 @@ function remote_play(player_id, playlist,index){
 // play the music stream for local player
 function local_player_play_stream(){
   // first play once then setup interval to avoid delay
-  local_play(buffer_list_playable,local_sound_choice*16+Math.floor(16*mouse_doc_y/document_height));
+  local_play(buffer_list_playable,local_sound_choice*16+Math.floor(16*(mouse_doc_y)/document_height));
   local_sound_interval_timeout = setInterval(function(){
-    local_play(buffer_list_playable,local_sound_choice*16+Math.floor(16*mouse_doc_y/document_height));
+    local_play(buffer_list_playable,local_sound_choice*16+Math.floor(16*(mouse_doc_y)/document_height));
   },170);
 }
 
@@ -175,6 +175,26 @@ function attach_mouse_events(){
     clear_local_sound_time_out();
   });
 }
+
+// leap functions
+function leap_start_sound(){
+  console.log("leap start");
+  socket.emit('user-mousedown', {id:my_id,x:leap_screen_x,y:leap_screen_y,c:local_sound_choice});
+  local_player_play_stream();
+}
+function leap_stop_sound(){
+  console.log("leap stop");
+  socket.emit('user-mouseup', {id:my_id,x:leap_screen_x,y:leap_screen_y,c:local_sound_choice});
+  clear_local_sound_time_out();
+}
+function leap_move(){
+  // override mouse position
+  mouse_doc_x = leap_screen_x;
+  mouse_doc_y = leap_screen_y;
+  socket.emit('user-motion', {id:my_id,x:mouse_doc_x,y:mouse_doc_y,c:local_sound_choice});
+}
+
+
 
 // attach keyboard event to the dom
 function attach_key_events(){

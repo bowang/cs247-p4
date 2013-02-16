@@ -18,6 +18,15 @@ body{
     top:0;
     left: 0;
 }
+#leap_circle{
+    width: 16px;
+    height: 16px;
+    position: fixed;
+    background: rgba(0,0,255,0.4);
+    border-radius: 8px;
+    top:0;
+    left: 0;
+}
 .other_circle{
     width: 12px;
     height: 12px;

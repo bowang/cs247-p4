@@ -34,7 +34,7 @@ function init_leap() {
     	var tip = obj.pointables[0].tipPosition;
     	document.getElementById("leap_status").innerHTML = '<pre>' + tip[0] +"<br/>"+tip[1]+"<br/>"+tip[2]+ '</pre>';
     	leap_y = tip[1];
-    	leap_screen_y = document_height - movement_speedup*document_height*((leap_y-50)/250.0);
+    	leap_screen_y = document_height - movement_speedup*document_height*((leap_y-80)/250.0);
     	if(Math.abs(leap_screen_y_previous - leap_y) > 0.1){
     		leap_move(); // fire move only when finger actually move
     		$("#leap_circle").css({left:leap_screen_x,top:leap_screen_y});

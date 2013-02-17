@@ -171,17 +171,6 @@ function remote_play(player_id, playlist,index){
   other_player_info[player_id].player.start(0);
 }
 
-// get document range y
-function get_y_doc_range(x){
-  if(x>1){
-    return 0.99; // correct offset 
-  }else if(x<0){
-    return 0;
-  }else{
-    return x;
-  }
-}
-
 // play the music stream for local player
 function local_player_play_stream(){
   // wait until it is the right time to play
@@ -312,6 +301,17 @@ function initialize_socket(){
   socket.on('other-mouseup', function (data) {
     window.clearInterval(other_player_info[data.id].interval);
   });
+}
+
+// get document range y
+function get_y_doc_range(x){
+  if(x>1){
+    return 0.99; // correct offset 
+  }else if(x<0){
+    return 0;
+  }else{
+    return x;
+  }
 }
 
 //generate random color

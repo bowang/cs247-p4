@@ -2,8 +2,12 @@ var ad_context; // this is the audio context
 var buffer_loader; // object contaning all buffer of sounds
 var buffer_list_playable;
 var local_buffer_player;
+var background_buffer_player;
 var local_sound_interval_timeout;
 var local_sound_choice = 0;
+var beat_speed = 170;
+var beat_next_time; // to prepare when to fire sound for the beats
+var bg_factor = 4;
 // sound source has all the sounds for the app
 var sound_source = [
       'sound/bziaou_16.ogg',
@@ -85,7 +89,8 @@ var sound_source = [
       'sound/syntklocka_stab_4.ogg',
       'sound/syntklocka_stab_3.ogg',
       'sound/syntklocka_stab_2.ogg',
-      'sound/syntklocka_stab_1.ogg'
+      'sound/syntklocka_stab_1.ogg',
+      'sound_bg/drumming3.ogg'
     ];
 var document_height,document_width;
 var mouse_doc_x, mouse_doc_y;
@@ -117,6 +122,15 @@ function buffer_loading_finished(bufferList) {
   initialize_socket();
   attach_mouse_events();
   attach_key_events();
+
+  // set beat timstamp to sync with local sound
+  setInterval(function(){
+    beat_next_time = (new Date()).getTime()+beat_speed;
+  },beat_speed); 
+  // set beat background sound
+  setInterval(function(){
+    play_background_beats(buffer_list_playable,80);
+  },beat_speed*bg_factor); 
 }
 
 // play a particular sound clip with a playlist, and the index in the playlist
@@ -128,6 +142,16 @@ function local_play(playlist,index){
   local_buffer_player.buffer = playlist[index];
   local_buffer_player.connect(ad_context.destination);
   local_buffer_player.start(0);
+}
+
+function play_background_beats(playlist,index){
+  if(typeof background_buffer_player !== "undefined"){
+    background_buffer_player.stop(0);
+  }
+  background_buffer_player = ad_context.createBufferSource();
+  background_buffer_player.buffer = playlist[index];
+  background_buffer_player.connect(ad_context.destination);
+  background_buffer_player.start(0);
 }
 
 // play a particular sound clip for a remote player with a playlist, and the index in the playlist
@@ -143,11 +167,14 @@ function remote_play(player_id, playlist,index){
 
 // play the music stream for local player
 function local_player_play_stream(){
-  // first play once then setup interval to avoid delay
-  local_play(buffer_list_playable,local_sound_choice*16+Math.floor(16*(mouse_doc_y)/document_height));
-  local_sound_interval_timeout = setInterval(function(){
+  // wait until it is the right time to play
+  setTimeout(function(){
+    // first play once then setup interval to avoid delay
     local_play(buffer_list_playable,local_sound_choice*16+Math.floor(16*(mouse_doc_y)/document_height));
-  },170);
+    local_sound_interval_timeout = setInterval(function(){
+      local_play(buffer_list_playable,local_sound_choice*16+Math.floor(16*(mouse_doc_y)/document_height));
+    },beat_speed);
+  },beat_next_time - (new Date()).getTime());
 }
 
 // clear music
@@ -257,11 +284,14 @@ function initialize_socket(){
       other_player_info[data.id] = {};
     }
     other_player_info[data.id].c = data.c;
-    // TODO: play sound once
-    remote_play(data.id,buffer_list_playable,other_player_info[data.id].c*16+Math.floor(16*other_player_info[data.id].y/document_height));
-    other_player_info[data.id].interval = setInterval(function(){
+    
+    // wait until the next appropriate time to play
+    setTimeout(function(){
       remote_play(data.id,buffer_list_playable,other_player_info[data.id].c*16+Math.floor(16*other_player_info[data.id].y/document_height));
-    },170);
+      other_player_info[data.id].interval = setInterval(function(){
+        remote_play(data.id,buffer_list_playable,other_player_info[data.id].c*16+Math.floor(16*other_player_info[data.id].y/document_height));
+      },beat_speed);
+    },beat_next_time - (new Date()).getTime());
 
   });
   socket.on('other-mouseup', function (data) {

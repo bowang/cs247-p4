@@ -127,6 +127,9 @@ function local_play(playlist,index){
   local_buffer_player.buffer = playlist[index];
   local_buffer_player.connect(ad_context.destination);
   local_buffer_player.start(0);
+  add_circle(mouse_doc_x - $(canvas).position().left,
+    mouse_doc_y - $(canvas).position().top,
+    circle_r * (0.5 + Math.random()));
 }
 
 // play a particular sound clip for a remote player with a playlist, and the index in the playlist

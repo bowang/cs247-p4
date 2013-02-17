@@ -89,6 +89,7 @@ var sound_source = [
     ];
 var document_height;
 var mouse_doc_x, mouse_doc_y;
+var mouse_down;
 var socket;
 var my_id = Math.random().toString(36).substring(7);
 
@@ -127,9 +128,6 @@ function local_play(playlist,index){
   local_buffer_player.buffer = playlist[index];
   local_buffer_player.connect(ad_context.destination);
   local_buffer_player.start(0);
-  add_circle(mouse_doc_x - $(canvas).position().left,
-    mouse_doc_y - $(canvas).position().top,
-    circle_r * (0.5 + Math.random()));
 }
 
 // play a particular sound clip for a remote player with a playlist, and the index in the playlist
@@ -171,11 +169,13 @@ function attach_mouse_events(){
     console.log("mouse down");
     socket.emit('user-mousedown', {id:my_id,x:mouse_doc_x,y:mouse_doc_y,c:local_sound_choice});
     local_player_play_stream();
+    mouse_down = true;
   });
   $(document).mouseup(function(e){
     console.log("mouse up");
     socket.emit('user-mouseup', {id:my_id,x:mouse_doc_x,y:mouse_doc_y,c:local_sound_choice});
     clear_local_sound_time_out();
+    mouse_down = false;
   });
 }
 

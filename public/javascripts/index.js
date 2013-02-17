@@ -1,23 +1,31 @@
 var circles = new Array();
 
-function Circle(x, y, r) {
+function Circle(x, y, r, filled) {
     this.x = x;
     this.y = y;
     this.r = r;
     this.color = "rgb(0,0,0)";
+    this.filled = filled;
 }
 
 function add_circle(x, y, r) {
-    var circle = new Circle(x, y, r);
+    var circle = new Circle(x, y, r, mouse_down);
     circles.push(circle);
-    console.log("added circle (" + x + ", " + y + ", " + r + ")");
+}
+
+function add_circles(x, y, n) {
+    add_circle(x, y, circle_r * (Math.random() + 0.5));
+    for (i = 1; i < n; i++) {
+        setTimeout(function(){
+            add_circle(x, y, circle_r * (Math.random() + 0.5));
+        }, refresh_interval * i);
+    }
 }
 
 function remove_circle(circle) {
     var index = circles.indexOf(circle);
     if (index >= 0) {
         circles.splice(index, 1);
-        console.log("removed circle");
     }
     else {
         console.log("failed to find circle");

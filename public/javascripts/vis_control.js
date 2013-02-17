@@ -11,7 +11,7 @@ function init_vis_canvas() {
         $(canvas).attr("width",$(window).width() * 0.98);
         $(canvas).attr("height",$(window).height() * 0.98 - $(canvas).position().top);
         ctx = canvas.getContext("2d");
-        //ctx.translate(0.5, 0.5);
+        ctx.translate(0.5, 0.5);
         setInterval(draw, refresh_interval);
     }
 }
@@ -29,6 +29,10 @@ function draw_circle(circle) {
     ctx.strokeStyle = circle.color;
     ctx.beginPath();
     ctx.arc(circle.x, circle.y, circle.r, 0, Math.PI*2, true);
+    if (circle.filled) {
+        ctx.fillStyle = "gray";
+        ctx.fill();
+    }
     ctx.stroke();
 }
 
@@ -50,6 +54,9 @@ function draw() {
         var y = (i+1) * gap;
         draw_line(0, y, w, y);
     }
+    add_circle(mouse_doc_x - $(canvas).position().left,
+        mouse_doc_y - $(canvas).position().top,
+        circle_r * (Math.random() + 0.5));
     for (i = 0; i < circles.length; i++) {
         draw_circle(circles[i]);
         update_circle(circles[i]);

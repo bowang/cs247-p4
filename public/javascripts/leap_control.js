@@ -1,7 +1,7 @@
 var ws;
 var leap_y = 0; // Leap motion's y coord
 var leap_screen_y = 0;
-var leap_screen_x = 300;
+var leap_screen_x = 0;
 var leap_screen_y_previous = leap_screen_y;
 var leap_trigger = false;
 var movement_speedup = 2;

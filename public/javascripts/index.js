@@ -9,7 +9,7 @@ function Circle(x, y, r, filled) {
 }
 
 function add_circle(x, y, r) {
-    var circle = new Circle(x, y, r, mouse_down);
+    var circle = new Circle(x, y, r, mouse_down||leap_trigger);
     circles.push(circle);
 }
 

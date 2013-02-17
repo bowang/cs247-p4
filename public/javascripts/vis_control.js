@@ -8,10 +8,10 @@ var circle_r = 5;
 function init_vis_canvas() {
     canvas = document.getElementById('canvas');
     if (canvas.getContext) {
-        $(canvas).width($(window).width() * 0.98);
-        $(canvas).height($(window).height() * 0.98 - $(canvas).position().top);
+        $(canvas).attr("width",$(window).width() * 0.98);
+        $(canvas).attr("height",$(window).height() * 0.98 - $(canvas).position().top);
         ctx = canvas.getContext("2d");
-        ctx.translate(0.5, 0.5);
+        //ctx.translate(0.5, 0.5);
         setInterval(draw, refresh_interval);
     }
 }

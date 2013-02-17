@@ -5,6 +5,8 @@ var local_buffer_player;
 var background_buffer_player;
 var local_sound_interval_timeout;
 var local_sound_choice = 0;
+var local_gain_node;
+var local_gain_value = 1;
 var beat_speed = 170;
 var beat_next_time; // to prepare when to fire sound for the beats
 var bg_factor = 4;
@@ -140,7 +142,11 @@ function local_play(playlist,index){
   }
   local_buffer_player = ad_context.createBufferSource();
   local_buffer_player.buffer = playlist[index];
-  local_buffer_player.connect(ad_context.destination);
+  // connect with gain mode
+  local_gain_node = ad_context.createGainNode();
+  local_buffer_player.connect(local_gain_node);
+  local_gain_node.connect(ad_context.destination);
+  local_gain_node.gain.value = local_gain_value;
   local_buffer_player.start(0);
 }
 
@@ -165,14 +171,25 @@ function remote_play(player_id, playlist,index){
   other_player_info[player_id].player.start(0);
 }
 
+// get document range y
+function get_y_doc_range(x){
+  if(x>1){
+    return 0.99; // correct offset 
+  }else if(x<0){
+    return 0;
+  }else{
+    return x;
+  }
+}
+
 // play the music stream for local player
 function local_player_play_stream(){
   // wait until it is the right time to play
   setTimeout(function(){
     // first play once then setup interval to avoid delay
-    local_play(buffer_list_playable,local_sound_choice*16+Math.floor(16*(mouse_doc_y)/document_height));
+    local_play(buffer_list_playable,local_sound_choice*16+Math.floor(16*get_y_doc_range((mouse_doc_y)/document_height)));
     local_sound_interval_timeout = setInterval(function(){
-      local_play(buffer_list_playable,local_sound_choice*16+Math.floor(16*(mouse_doc_y)/document_height));
+      local_play(buffer_list_playable,local_sound_choice*16+Math.floor(16*get_y_doc_range((mouse_doc_y)/document_height)));
     },beat_speed);
   },beat_next_time - (new Date()).getTime());
 }
@@ -186,7 +203,6 @@ function clear_local_sound_time_out(){
 function attach_mouse_events(){
   document_height = $(document).height();
   document_width = $(document).width();
-  leap_screen_x = document_width/2;
   $(document).mousemove(function(e){
     $('#status').html(e.pageX +', '+ e.pageY);
     mouse_doc_x = e.pageX;
@@ -196,6 +212,7 @@ function attach_mouse_events(){
   });
   $(document).mousedown(function(e){
     console.log("mouse down");
+    local_gain_value = 1;
     socket.emit('user-mousedown', {id:my_id,x:mouse_doc_x,y:mouse_doc_y,c:local_sound_choice});
     local_player_play_stream();
     mouse_down = true;
@@ -225,8 +242,6 @@ function leap_move(){
   mouse_doc_y = leap_screen_y;
   socket.emit('user-motion', {id:my_id,x:mouse_doc_x,y:mouse_doc_y,c:local_sound_choice});
 }
-
-
 
 // attach keyboard event to the dom
 function attach_key_events(){
@@ -287,9 +302,9 @@ function initialize_socket(){
     
     // wait until the next appropriate time to play
     setTimeout(function(){
-      remote_play(data.id,buffer_list_playable,other_player_info[data.id].c*16+Math.floor(16*other_player_info[data.id].y/document_height));
+      remote_play(data.id,buffer_list_playable,other_player_info[data.id].c*16+Math.floor(16*get_y_doc_range(other_player_info[data.id].y/document_height)));
       other_player_info[data.id].interval = setInterval(function(){
-        remote_play(data.id,buffer_list_playable,other_player_info[data.id].c*16+Math.floor(16*other_player_info[data.id].y/document_height));
+        remote_play(data.id,buffer_list_playable,other_player_info[data.id].c*16+Math.floor(16*get_y_doc_range(other_player_info[data.id].y/document_height)));
       },beat_speed);
     },beat_next_time - (new Date()).getTime());
 

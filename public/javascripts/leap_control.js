@@ -12,6 +12,9 @@ if ((typeof(WebSocket) == 'undefined') &&
   WebSocket = MozWebSocket;
 }
 
+$(document).ready(function(){
+  leap_screen_x = $(document).width()/2;
+})
 // Create the socket with event handlers and also feed in leap_screen_y to control the sound
 function init_leap() {
   //Create and open the socket
@@ -36,6 +39,8 @@ function init_leap() {
     		leap_move(); // fire move only when finger actually move
     		$("#leap_circle").css({left:leap_screen_x,top:leap_screen_y});
     	}
+      // setup local gain value
+      local_gain_value = ((tip[2]/50) > 0)? (tip[2]/50) : 0;
     	if(leap_trigger == false && tip[2] > 0){
     		leap_trigger = true;
     		leap_start_sound();		

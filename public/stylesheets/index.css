@@ -9,6 +9,9 @@ body{
     -ms-user-select: none;
     user-select: none;
 }
+#canvas{
+	background: #fafafa;
+}
 #my_circle{
     width: 16px;
     height: 16px;

@@ -179,7 +179,7 @@ function remote_play(player_id, playlist,index,volume){
   other_player_info[player_id].gain = ad_context.createGainNode();
   other_player_info[player_id].player.connect(other_player_info[player_id].gain);
   other_player_info[player_id].gain.connect(ad_context.destination);
-  other_player_info[player_id].gain.value = volume;
+  other_player_info[player_id].gain.gain.value = volume;
   other_player_info[player_id].player.start(0);
 }
 

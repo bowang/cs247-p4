@@ -183,8 +183,6 @@ function remote_play(player_id, playlist,index,volume){
   other_player_info[player_id].player.start(0);
 }
 
-
-
 // play the music stream for local player
 function local_player_play_stream(){
   // first play once then setup interval to avoid delay
@@ -202,7 +200,6 @@ function local_player_play_stream(){
 // clear music
 function clear_local_sound_time_out(){
   window.clearInterval(local_sound_interval_timeout);
-  //to_be_clear = true;
 }
 
 // attach mouse events to the dom

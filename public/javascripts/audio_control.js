@@ -169,13 +169,17 @@ function play_background_beats(playlist,index){
 }
 
 // play a particular sound clip for a remote player with a playlist, and the index in the playlist
-function remote_play(player_id, playlist,index){
+function remote_play(player_id, playlist,index,volume){
   if(typeof other_player_info[player_id].player !== "undefined"){
     other_player_info[player_id].player.stop(0);
   }
   other_player_info[player_id].player = ad_context.createBufferSource();
   other_player_info[player_id].player.buffer = playlist[index];
-  other_player_info[player_id].player.connect(ad_context.destination);
+  // connect with gain node
+  other_player_info[player_id].gain = ad_context.createGainNode();
+  other_player_info[player_id].player.connect(other_player_info[player_id].gain);
+  other_player_info[player_id].gain.connect(ad_context.destination);
+  other_player_info[player_id].gain.value = volume;
   other_player_info[player_id].player.start(0);
 }
 
@@ -205,18 +209,18 @@ function attach_mouse_events(){
     mouse_doc_x = e.pageX;
     mouse_doc_y = e.pageY;
     $("#my_circle").css({top:mouse_doc_y-10,left:mouse_doc_x-10});
-    socket.emit('user-motion', {id:my_id,x:mouse_doc_x,y:mouse_doc_y,c:local_sound_choice});
+    socket.emit('user-motion', {id:my_id,x:mouse_doc_x,y:mouse_doc_y,c:local_sound_choice,g:local_gain_value});
   });
   $(document).mousedown(function(e){
     console.log("mouse down");
     local_gain_value = 1;
-    socket.emit('user-mousedown', {id:my_id,x:mouse_doc_x,y:mouse_doc_y,c:local_sound_choice});
+    socket.emit('user-mousedown', {id:my_id,x:mouse_doc_x,y:mouse_doc_y,c:local_sound_choice,g:local_gain_value});
     local_player_play_stream();
     mouse_down = true;
   });
   $(document).mouseup(function(e){
     console.log("mouse up");
-    socket.emit('user-mouseup', {id:my_id,x:mouse_doc_x,y:mouse_doc_y,c:local_sound_choice});
+    socket.emit('user-mouseup', {id:my_id,x:mouse_doc_x,y:mouse_doc_y,c:local_sound_choice,g:local_gain_value});
     clear_local_sound_time_out();
     mouse_down = false;
   });
@@ -225,19 +229,19 @@ function attach_mouse_events(){
 // leap functions
 function leap_start_sound(){
   console.log("leap start");
-  socket.emit('user-mousedown', {id:my_id,x:leap_screen_x,y:leap_screen_y,c:local_sound_choice});
+  socket.emit('user-mousedown', {id:my_id,x:leap_screen_x,y:leap_screen_y,c:local_sound_choice,g:local_gain_value});
   local_player_play_stream();
 }
 function leap_stop_sound(){
   console.log("leap stop");
-  socket.emit('user-mouseup', {id:my_id,x:leap_screen_x,y:leap_screen_y,c:local_sound_choice});
+  socket.emit('user-mouseup', {id:my_id,x:leap_screen_x,y:leap_screen_y,c:local_sound_choice,g:local_gain_value});
   clear_local_sound_time_out();
 }
 function leap_move(){
   // override mouse position
   mouse_doc_x = leap_screen_x;
   mouse_doc_y = leap_screen_y;
-  socket.emit('user-motion', {id:my_id,x:mouse_doc_x,y:mouse_doc_y,c:local_sound_choice});
+  socket.emit('user-motion', {id:my_id,x:mouse_doc_x,y:mouse_doc_y,c:local_sound_choice,g:local_gain_value});
 }
 
 // attach keyboard event to the dom
@@ -284,6 +288,7 @@ function initialize_socket(){
     other_player_info[data.id].x = data.x;
     other_player_info[data.id].y = data.y;
     other_player_info[data.id].c = data.c;
+    other_player_info[data.id].g = data.g;
     $("#"+data.id).css({top:data.y,left:data.x});
   });
   socket.on('other-disconnect', function (data) {
@@ -296,13 +301,14 @@ function initialize_socket(){
       other_player_info[data.id] = {};
     }
     other_player_info[data.id].c = data.c;
+    other_player_info[data.id].g = data.g;
     other_player_info[data.id].mousedown = true;
     
     // wait until the next appropriate time to play
     setTimeout(function(){
-      remote_play(data.id,buffer_list_playable,other_player_info[data.id].c*16+Math.floor(16*get_y_doc_range(other_player_info[data.id].y/document_height)));
+      remote_play(data.id,buffer_list_playable,other_player_info[data.id].c*16+Math.floor(16*get_y_doc_range(other_player_info[data.id].y/document_height)),other_player_info[data.id].g);
       other_player_info[data.id].interval = setInterval(function(){
-        remote_play(data.id,buffer_list_playable,other_player_info[data.id].c*16+Math.floor(16*get_y_doc_range(other_player_info[data.id].y/document_height)));
+        remote_play(data.id,buffer_list_playable,other_player_info[data.id].c*16+Math.floor(16*get_y_doc_range(other_player_info[data.id].y/document_height)),other_player_info[data.id].g);
       },beat_speed);
     },beat_next_time - (new Date()).getTime());
 

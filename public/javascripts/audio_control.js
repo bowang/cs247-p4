@@ -154,7 +154,7 @@ function local_play(playlist,index){
   local_gain_node = ad_context.createGainNode();
   local_buffer_player.connect(local_gain_node);
   local_gain_node.connect(ad_context.destination);
-  local_gain_node.gain.value = local_gain_value * 0.8;
+  local_gain_node.gain.value = local_gain_value * 0.5;
   local_buffer_player.start(0);
 }
 
@@ -179,25 +179,30 @@ function remote_play(player_id, playlist,index,volume){
   other_player_info[player_id].gain = ad_context.createGainNode();
   other_player_info[player_id].player.connect(other_player_info[player_id].gain);
   other_player_info[player_id].gain.connect(ad_context.destination);
-  other_player_info[player_id].gain.gain.value = volume * 0.8;
+  other_player_info[player_id].gain.gain.value = volume * 0.5;
   other_player_info[player_id].player.start(0);
 }
 
+
+
 // play the music stream for local player
 function local_player_play_stream(){
-  // wait until it is the right time to play
+  // first play once then setup interval to avoid delay
   setTimeout(function(){
-    // first play once then setup interval to avoid delay
     local_play(buffer_list_playable,local_sound_choice*16+Math.floor(16*get_y_doc_range((mouse_doc_y)/document_height)));
-    local_sound_interval_timeout = setInterval(function(){
-      local_play(buffer_list_playable,local_sound_choice*16+Math.floor(16*get_y_doc_range((mouse_doc_y)/document_height)));
-    },beat_speed);
   },beat_next_time - (new Date()).getTime());
+  local_sound_interval_timeout = setInterval(function(){
+    // wait until it is the right time to play
+    setTimeout(function(){
+      local_play(buffer_list_playable,local_sound_choice*16+Math.floor(16*get_y_doc_range((mouse_doc_y)/document_height)));
+    },beat_next_time - (new Date()).getTime());
+  },beat_speed);
 }
 
 // clear music
 function clear_local_sound_time_out(){
   window.clearInterval(local_sound_interval_timeout);
+  //to_be_clear = true;
 }
 
 // attach mouse events to the dom
@@ -307,10 +312,12 @@ function initialize_socket(){
     // wait until the next appropriate time to play
     setTimeout(function(){
       remote_play(data.id,buffer_list_playable,other_player_info[data.id].c*16+Math.floor(16*get_y_doc_range(other_player_info[data.id].y/document_height)),other_player_info[data.id].g);
-      other_player_info[data.id].interval = setInterval(function(){
-        remote_play(data.id,buffer_list_playable,other_player_info[data.id].c*16+Math.floor(16*get_y_doc_range(other_player_info[data.id].y/document_height)),other_player_info[data.id].g);
-      },beat_speed);
     },beat_next_time - (new Date()).getTime());
+    other_player_info[data.id].interval = setInterval(function(){
+      setTimeout(function(){
+        remote_play(data.id,buffer_list_playable,other_player_info[data.id].c*16+Math.floor(16*get_y_doc_range(other_player_info[data.id].y/document_height)),other_player_info[data.id].g);
+      },beat_next_time - (new Date()).getTime());
+    },beat_speed);
 
   });
   socket.on('other-mouseup', function (data) {

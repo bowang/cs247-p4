@@ -154,7 +154,7 @@ function local_play(playlist,index){
   local_gain_node = ad_context.createGainNode();
   local_buffer_player.connect(local_gain_node);
   local_gain_node.connect(ad_context.destination);
-  local_gain_node.gain.value = local_gain_value;
+  local_gain_node.gain.value = local_gain_value * 0.8;
   local_buffer_player.start(0);
 }
 
@@ -179,7 +179,7 @@ function remote_play(player_id, playlist,index,volume){
   other_player_info[player_id].gain = ad_context.createGainNode();
   other_player_info[player_id].player.connect(other_player_info[player_id].gain);
   other_player_info[player_id].gain.connect(ad_context.destination);
-  other_player_info[player_id].gain.gain.value = volume;
+  other_player_info[player_id].gain.gain.value = volume * 0.8;
   other_player_info[player_id].player.start(0);
 }
 

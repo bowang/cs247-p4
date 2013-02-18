@@ -1,14 +1,22 @@
-var ad_context; // this is the audio context
-var buffer_loader; // object contaning all buffer of sounds
+/* this is the audio context, used to play, buffer, and control all sounds*/
+var ad_context; 
+/* buffer loader object */
+var buffer_loader; 
+/* list of playable buffers */
 var buffer_list_playable;
+/* buffer player for local player */
 var local_buffer_player;
+/* buffer player for background beats */
 var background_buffer_player;
 var local_sound_interval_timeout;
 var local_sound_choice = 0;
 var local_gain_node;
+/* the volume of local sound */
 var local_gain_value = 1;
 var beat_speed = 170;
-var beat_next_time; // to prepare when to fire sound for the beats
+/* the time that the local player should fire for the next sound */
+var beat_next_time; 
+/* background beat's speed factor */
 var bg_factor = 4;
 // sound source has all the sounds for the app
 var sound_source = [

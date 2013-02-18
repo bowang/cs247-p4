@@ -296,6 +296,7 @@ function initialize_socket(){
       other_player_info[data.id] = {};
     }
     other_player_info[data.id].c = data.c;
+    other_player_info[data.id].mousedown = true;
     
     // wait until the next appropriate time to play
     setTimeout(function(){
@@ -308,6 +309,7 @@ function initialize_socket(){
   });
   socket.on('other-mouseup', function (data) {
     window.clearInterval(other_player_info[data.id].interval);
+    other_player_info[data.id].mousedown = false;
   });
 }
 

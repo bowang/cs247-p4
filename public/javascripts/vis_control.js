@@ -56,7 +56,15 @@ function draw() {
     }
     add_circle(mouse_doc_x - $(canvas).position().left,
         mouse_doc_y - $(canvas).position().top,
-        circle_r * (Math.random() + 0.5));
+        circle_r * (Math.random() + 0.5),
+        mouse_down||leap_trigger);
+    for (var id in other_player_info) {
+        add_circle(other_player_info[id].x,
+            other_player_info[id].y,
+            circle_r * (Math.random() + 0.5),
+            other_player_info[id].mousedown);
+    }
+
     for (i = 0; i < circles.length; i++) {
         draw_circle(circles[i]);
         update_circle(circles[i]);

@@ -8,8 +8,8 @@ function Circle(x, y, r, filled) {
     this.filled = filled;
 }
 
-function add_circle(x, y, r) {
-    var circle = new Circle(x, y, r, mouse_down||leap_trigger);
+function add_circle(x, y, r, fill) {
+    var circle = new Circle(x, y, r, fill);
     circles.push(circle);
 }
 

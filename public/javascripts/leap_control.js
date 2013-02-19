@@ -16,6 +16,7 @@ var movement_speedup = 2;
 var message_counter = 0;
 // sample rate from leap's socket server
 var message_rate = 5;
+var allow_instrument_switch = true;
 
 // Support both the WebSocket and MozWebSocket objects
 if ((typeof(WebSocket) == 'undefined') &&
@@ -45,13 +46,17 @@ function init_leap() {
     var obj = JSON.parse(event.data);
     if(typeof obj.pointables !== "undefined" && typeof obj.pointables[0] !== "undefined"){
     	var tip = obj.pointables[0].tipPosition;
-    	document.getElementById("leap_status").innerHTML = '<pre>' + tip[0] +"<br/>"+tip[1]+"<br/>"+tip[2]+ '</pre>';
+    	//document.getElementById("leap_status").innerHTML = '<pre>' + tip[0] +"<br/>"+tip[1]+"<br/>"+tip[2]+ '</pre>';
     	leap_y = tip[1];
       leap_x = tip[0];
       // detect swtiching instrument
-      if(Math.abs(leap_x-leap_x_previous)>30){
-        console.log("drastic horizontal movement: "+ (leap_x-leap_x_previous));
+      if(Math.abs(leap_x-leap_x_previous)>20 && allow_instrument_switch == true){
+        //console.log("drastic horizontal movement: "+ (leap_x-leap_x_previous));
         leap_select_sound(leap_x-leap_x_previous);
+        allow_instrument_switch = false;
+        setTimeout(function(){
+          allow_instrument_switch = true;
+        },1000)
       }
     	leap_screen_y = document_height - movement_speedup*document_height*((leap_y-80)/250.0);
     	if(Math.abs(leap_screen_y_previous - leap_y) > 0.1){

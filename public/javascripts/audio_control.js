@@ -13,7 +13,7 @@ var local_sound_choice = 0;
 var local_gain_node;
 /* the volume of local sound */
 var local_gain_value = 1;
-var beat_speed = 170;
+var beat_speed = 200;
 /* the time that the local player should fire for the next sound */
 var beat_next_time; 
 /* background beat's speed factor */

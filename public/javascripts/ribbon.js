@@ -11,12 +11,8 @@ ribbon.prototype =
 
 	painters: null,
 
-	interval: null,
-
 	init: function( context )
 	{
-		var scope = this;
-		
 		this.context = context;
 		this.context.globalCompositeOperation = 'source-over';
 
@@ -28,27 +24,6 @@ ribbon.prototype =
 		for (var i = 0; i < 50; i++)
 		{
 			this.painters.push({ dx: SCREEN_WIDTH / 2, dy: SCREEN_HEIGHT / 2, ax: 0, ay: 0, div: 0.1, ease: Math.random() * 0.2 + 0.6 });
-		}
-		
-		this.interval = setInterval( update, 1000/60 );
-		
-		function update()
-		{
-			var i;
-
-			this.context.lineWidth = BRUSH_SIZE;			
-			this.context.strokeStyle = "rgba(" + COLOR[0] + ", " + COLOR[1] + ", " + COLOR[2] + ", " + 0.05 * BRUSH_PRESSURE + ")";
-			
-			for (i = 0; i < scope.painters.length; i++)
-			{
-				scope.context.beginPath();
-				scope.context.moveTo(scope.painters[i].dx, scope.painters[i].dy);		
-
-				scope.painters[i].dx -= scope.painters[i].ax = (scope.painters[i].ax + (scope.painters[i].dx - scope.mouseX) * scope.painters[i].div) * scope.painters[i].ease;
-				scope.painters[i].dy -= scope.painters[i].ay = (scope.painters[i].ay + (scope.painters[i].dy - scope.mouseY) * scope.painters[i].div) * scope.painters[i].ease;
-				scope.context.lineTo(scope.painters[i].dx, scope.painters[i].dy);
-				scope.context.stroke();
-			}
 		}
 	},
 	
@@ -80,5 +55,32 @@ ribbon.prototype =
 	strokeEnd: function()
 	{
 	
-	}
+	},
+
+    update: function()
+    {
+        var i;
+
+        this.context.lineWidth = BRUSH_SIZE;
+        this.context.strokeStyle = "rgba(" + COLOR[0] + ", " + COLOR[1] + ", " + COLOR[2] + ", " + BRUSH_PRESSURE + ")";
+
+        for (i = 0; i < this.painters.length; i++)
+        {
+            this.context.beginPath();
+/*
+            console.log('from: ' + this.painters[i].dx + ', ' +  this.painters[i].dy);
+            console.log('a: ' + this.painters[i].ax + ', ' +  this.painters[i].ay);
+*/
+            this.context.moveTo(this.painters[i].dx, this.painters[i].dy);
+            this.painters[i].dx -= this.painters[i].ax = (this.painters[i].ax + (this.painters[i].dx - this.mouseX) * this.painters[i].div) * this.painters[i].ease;
+            this.painters[i].dy -= this.painters[i].ay = (this.painters[i].ay + (this.painters[i].dy - this.mouseY) * this.painters[i].div) * this.painters[i].ease;
+/*
+            console.log('to: ' + this.painters[i].dx + ', ' +  this.painters[i].dy);
+            console.log('a: ' + this.painters[i].ax + ', ' +  this.painters[i].ay);
+*/
+            this.context.lineTo(this.painters[i].dx, this.painters[i].dy);
+            this.context.stroke();
+        }
+    }
+
 }

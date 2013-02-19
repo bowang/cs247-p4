@@ -42,8 +42,8 @@ function remove_circle(circle) {
 function init_vis_canvas() {
     canvas = document.getElementById('canvas');
     if (canvas.getContext) {
-        $(canvas).attr("width",$(window).width() * 0.98);
-        $(canvas).attr("height",$(window).height() * 0.98 - $(canvas).position().top);
+        $(canvas).attr("width",$(window).width());
+        $(canvas).attr("height",$(window).height() - $(canvas).position().top);
         ctx = canvas.getContext("2d");
         ctx.translate(0.5, 0.5);
         setInterval(draw, refresh_interval);

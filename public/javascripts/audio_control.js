@@ -27,6 +27,7 @@ for(var i=0; i<sound_type.length;i++){
   }
 }
 sound_source.push("sound_bg/drumming3.ogg");
+var total_sound_num = sound_type.length;
 var document_height,document_width;
 var mouse_doc_x, mouse_doc_y;
 var mouse_down;
@@ -64,7 +65,7 @@ function buffer_loading_finished(bufferList) {
   },beat_speed); 
   // set beat background sound
   setInterval(function(){
-    play_background_beats(buffer_list_playable,128);
+    play_background_beats(buffer_list_playable,16*total_sound_num);
   },beat_speed*bg_factor); 
 }
 
@@ -175,12 +176,27 @@ function leap_move(){
 function attach_key_events(){
   $(document).keypress(function(e) {
     console.log("Key pressed: " + e.which);
-    $(".select_sound").removeClass("sel_highlighted");
-    if(e.which>=49 && e.which<=49+8){
+    if(e.which>=49 && e.which<49+total_sound_num){
+      $(".select_sound").removeClass("sel_highlighted");
       local_sound_choice = e.which - 49;
       $("#sound_"+(local_sound_choice+1)).addClass("sel_highlighted");
     }
   });
+}
+
+// direction negative means incrementing sound
+function leap_select_sound(direction){
+    if(direction < 0){
+      if(local_sound_choice < total_sound_num - 1){
+        local_sound_choice += 1;
+      }
+    }else{
+      if(local_sound_choice > 0){
+        local_sound_choice -= 1;
+      }
+    }
+    $(".select_sound").removeClass("sel_highlighted");
+    $("#sound_"+(local_sound_choice+1)).addClass("sel_highlighted");
 }
 
 // initialize web socket to listen to actions from other users

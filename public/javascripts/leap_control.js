@@ -1,3 +1,9 @@
+/*
+
+LEAP performance tweak: 1. reduce the frame rate of leap motion. 2. elimate all html content set in loops
+
+*/
+
 var ws;
 var leap_y = 0; // Leap motion's y coord
 var leap_screen_y = 0;
@@ -5,6 +11,9 @@ var leap_screen_x = 0;
 var leap_screen_y_previous = leap_screen_y;
 var leap_trigger = false;
 var movement_speedup = 2;
+var message_counter = 0;
+// sample rate from leap's socket server
+var message_rate = 5;
 
 // Support both the WebSocket and MozWebSocket objects
 if ((typeof(WebSocket) == 'undefined') &&
@@ -28,11 +37,13 @@ function init_leap() {
   // On message received
   ws.onmessage = function(event) {
   	// we do not want to listen so frequently to leap, so let's only listen every few seconds
-
+    message_counter += 1;
+    // we only sample using a fixed rate from leap's socket server to reduce computation cost
+    if(message_counter % message_rate !=0) return;
     var obj = JSON.parse(event.data);
     if(typeof obj.pointables !== "undefined" && typeof obj.pointables[0] !== "undefined"){
     	var tip = obj.pointables[0].tipPosition;
-    	document.getElementById("leap_status").innerHTML = '<pre>' + tip[0] +"<br/>"+tip[1]+"<br/>"+tip[2]+ '</pre>';
+    	//document.getElementById("leap_status").innerHTML = '<pre>' + tip[0] +"<br/>"+tip[1]+"<br/>"+tip[2]+ '</pre>';
     	leap_y = tip[1];
     	leap_screen_y = document_height - movement_speedup*document_height*((leap_y-80)/250.0);
     	if(Math.abs(leap_screen_y_previous - leap_y) > 0.1){

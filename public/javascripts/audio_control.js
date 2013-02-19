@@ -132,7 +132,7 @@ function attach_mouse_events(){
   document_height = $(document).height();
   document_width = $(document).width();
   $(document).mousemove(function(e){
-    $('#status').html(e.pageX +', '+ e.pageY);
+    //$('#status').html(e.pageX +', '+ e.pageY);
     mouse_doc_x = e.pageX;
     mouse_doc_y = e.pageY;
     $("#my_circle").css({top:mouse_doc_y-10,left:mouse_doc_x-10});

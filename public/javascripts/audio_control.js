@@ -19,89 +19,14 @@ var beat_next_time;
 /* background beat's speed factor */
 var bg_factor = 4;
 // sound source has all the sounds for the app
-var sound_source = [
-      'sound/bziaou_16.ogg',
-      'sound/bziaou_15.ogg',
-      'sound/bziaou_14.ogg',
-      'sound/bziaou_13.ogg',
-      'sound/bziaou_12.ogg',
-      'sound/bziaou_11.ogg',
-      'sound/bziaou_10.ogg',
-      'sound/bziaou_9.ogg',
-      'sound/bziaou_8.ogg',
-      'sound/bziaou_7.ogg',
-      'sound/bziaou_6.ogg',
-      'sound/bziaou_5.ogg',
-      'sound/bziaou_4.ogg',
-      'sound/bziaou_3.ogg',
-      'sound/bziaou_2.ogg',
-      'sound/bziaou_1.ogg',
-      'sound/syntklocka_stab_16.ogg',
-      'sound/syntklocka_stab_15.ogg',
-      'sound/syntklocka_stab_14.ogg',
-      'sound/syntklocka_stab_13.ogg',
-      'sound/syntklocka_stab_12.ogg',
-      'sound/syntklocka_stab_11.ogg',
-      'sound/syntklocka_stab_10.ogg',
-      'sound/syntklocka_stab_9.ogg',
-      'sound/syntklocka_stab_8.ogg',
-      'sound/syntklocka_stab_7.ogg',
-      'sound/syntklocka_stab_6.ogg',
-      'sound/syntklocka_stab_5.ogg',
-      'sound/syntklocka_stab_4.ogg',
-      'sound/syntklocka_stab_3.ogg',
-      'sound/syntklocka_stab_2.ogg',
-      'sound/syntklocka_stab_1.ogg',
-      'sound/8bit_stab_16.ogg',
-      'sound/8bit_stab_15.ogg',
-      'sound/8bit_stab_14.ogg',
-      'sound/8bit_stab_13.ogg',
-      'sound/8bit_stab_12.ogg',
-      'sound/8bit_stab_11.ogg',
-      'sound/8bit_stab_10.ogg',
-      'sound/8bit_stab_9.ogg',
-      'sound/8bit_stab_8.ogg',
-      'sound/8bit_stab_7.ogg',
-      'sound/8bit_stab_6.ogg',
-      'sound/8bit_stab_5.ogg',
-      'sound/8bit_stab_4.ogg',
-      'sound/8bit_stab_3.ogg',
-      'sound/8bit_stab_2.ogg',
-      'sound/8bit_stab_1.ogg',
-      'sound/bassdist_16.ogg',
-      'sound/bassdist_15.ogg',
-      'sound/bassdist_14.ogg',
-      'sound/bassdist_13.ogg',
-      'sound/bassdist_12.ogg',
-      'sound/bassdist_11.ogg',
-      'sound/bassdist_10.ogg',
-      'sound/bassdist_9.ogg',
-      'sound/bassdist_8.ogg',
-      'sound/bassdist_7.ogg',
-      'sound/bassdist_6.ogg',
-      'sound/bassdist_5.ogg',
-      'sound/bassdist_4.ogg',
-      'sound/bassdist_3.ogg',
-      'sound/bassdist_2.ogg',
-      'sound/bassdist_1.ogg',
-      'sound/syntklocka_stab_16.ogg',
-      'sound/syntklocka_stab_15.ogg',
-      'sound/syntklocka_stab_14.ogg',
-      'sound/syntklocka_stab_13.ogg',
-      'sound/syntklocka_stab_12.ogg',
-      'sound/syntklocka_stab_11.ogg',
-      'sound/syntklocka_stab_10.ogg',
-      'sound/syntklocka_stab_9.ogg',
-      'sound/syntklocka_stab_8.ogg',
-      'sound/syntklocka_stab_7.ogg',
-      'sound/syntklocka_stab_6.ogg',
-      'sound/syntklocka_stab_5.ogg',
-      'sound/syntklocka_stab_4.ogg',
-      'sound/syntklocka_stab_3.ogg',
-      'sound/syntklocka_stab_2.ogg',
-      'sound/syntklocka_stab_1.ogg',
-      'sound_bg/drumming3.ogg'
-    ];
+var sound_source = [];
+var sound_type = ["8bit_stab","bassdist","bee_long","bziaou","drums","syntklocka_stab","voice","woody"];
+for(var i=0; i<sound_type.length;i++){
+  for(var c=16; c>0; c--){
+    sound_source.push("sound/"+sound_type[i]+"_"+c+".ogg");
+  }
+}
+sound_source.push("sound_bg/drumming3.ogg");
 var document_height,document_width;
 var mouse_doc_x, mouse_doc_y;
 var mouse_down;
@@ -139,7 +64,7 @@ function buffer_loading_finished(bufferList) {
   },beat_speed); 
   // set beat background sound
   setInterval(function(){
-    play_background_beats(buffer_list_playable,80);
+    play_background_beats(buffer_list_playable,128);
   },beat_speed*bg_factor); 
 }
 
@@ -254,28 +179,9 @@ function attach_key_events(){
   $(document).keypress(function(e) {
     console.log("Key pressed: " + e.which);
     $(".select_sound").removeClass("sel_highlighted");
-    switch(e.which){
-      case 49:
-        local_sound_choice = 0;
-        $("#sound_1").addClass("sel_highlighted");
-        break;
-      case 50:
-        local_sound_choice = 1;
-        $("#sound_2").addClass("sel_highlighted");
-        break;
-      case 51:
-        local_sound_choice = 2;
-        $("#sound_3").addClass("sel_highlighted");
-        break;
-      case 52:
-        local_sound_choice = 3;
-        $("#sound_4").addClass("sel_highlighted");
-        break;
-      case 53:
-        local_sound_choice = 4;
-        $("#sound_5").addClass("sel_highlighted");
-        break;
-      default:
+    if(e.which>=49 && e.which<=49+8){
+      local_sound_choice = e.which - 49;
+      $("#sound_"+(local_sound_choice+1)).addClass("sel_highlighted");
     }
   });
 }

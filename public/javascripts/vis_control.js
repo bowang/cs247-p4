@@ -5,17 +5,18 @@ var line_num = 16 - 1;
 var circle_speed_x = 10;
 var circle_r = 5;
 var circles = new Array();
+var colors = ["#D30068", "#78E700", "#3914AF", "#7109AA", "#FFFF00", "#FF7400", "#009999", "#FFAA00"];
 
-function Circle(x, y, r, filled) {
+function Circle(x, y, r, filled, color_id) {
     this.x = x;
     this.y = y;
     this.r = r;
-    this.color = "rgb(0,0,0)";
+    this.color = colors[color_id];
     this.filled = filled;
 }
 
-function add_circle(x, y, r, fill) {
-    var circle = new Circle(x, y, r, fill);
+function add_circle(x, y, r, fill, color_id) {
+    var circle = new Circle(x, y, r, fill, color_id);
     circles.push(circle);
 }
 
@@ -52,6 +53,7 @@ function init_vis_canvas() {
 
 function draw_line(x0, y0, x1, y1) {
     ctx.lineWidth = 1;
+    ctx.strokeStyle = "black";
     ctx.beginPath();
     ctx.moveTo(x0, y0);
     ctx.lineTo(x1, y1);
@@ -64,7 +66,7 @@ function draw_circle(circle) {
     ctx.beginPath();
     ctx.arc(circle.x, circle.y, circle.r, 0, Math.PI*2, true);
     if (circle.filled) {
-        ctx.fillStyle = "gray";
+        ctx.fillStyle = circle.color;
         ctx.fill();
     }
     ctx.stroke();
@@ -91,12 +93,15 @@ function draw() {
     add_circle(mouse_doc_x - $(canvas).position().left,
         mouse_doc_y - $(canvas).position().top,
         circle_r * (Math.random() + 0.5),
-        mouse_down||leap_trigger);
+        mouse_down||leap_trigger,
+        local_sound_choice);
+
     for (var id in other_player_info) {
         add_circle(other_player_info[id].x,
             other_player_info[id].y,
             circle_r * (Math.random() + 0.5),
-            other_player_info[id].mousedown);
+            other_player_info[id].mousedown,
+            other_player_info[id].c);
     }
 
     for (i = 0; i < circles.length; i++) {

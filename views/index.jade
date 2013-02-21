@@ -3,6 +3,7 @@ head
 	link(rel='stylesheet', href='/stylesheets/index.css')
 	link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Titillium+Web:300')
 	script(src="http://code.jquery.com/jquery-latest.min.js")
+	script(src="http://code.jquery.com/jquery-1.9.1.js")
 	script(src="/socket.io/socket.io.js")
 	script(src="/javascripts/leap_control.js")
 	script(src="/javascripts/audio_control.js")
@@ -25,6 +26,14 @@ body
 			#sound_8.select_sound 8
 	#loading 
 		#loading_text loading...
+	#tutorial
+		#progressbar
+		#t1.img.hide 
+			img(src="images/instruction1.jpg")
+		#t2.img.hide 
+			img(src="images/instruction2.jpg")
+		#t3.img.hide 
+			img(src="images/instruction3.jpg")
 	#leap_connection.hide
 	#leap_status
 	#status.hide

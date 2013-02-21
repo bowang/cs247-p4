@@ -52,7 +52,7 @@ function init_leap() {
       // detect swtiching instrument
       if(Math.abs(leap_x-leap_x_previous)>20 && allow_instrument_switch == true){
         //console.log("drastic horizontal movement: "+ (leap_x-leap_x_previous));
-        leap_select_sound(leap_x-leap_x_previous);
+        leap_select_sound(leap_x_previous-leap_x);
         allow_instrument_switch = false;
         setTimeout(function(){
           allow_instrument_switch = true;
@@ -64,11 +64,11 @@ function init_leap() {
     		$("#leap_circle").css({left:leap_screen_x,top:leap_screen_y});
     	}
       // setup local gain value
-      local_gain_value = ((tip[2]/50) > 0)? (tip[2]/50) : 0;
-    	if(leap_trigger == false && tip[2] > 0){
+      local_gain_value = ((tip[2]/50) < 0)? (tip[2]/50) : 0;
+    	if(leap_trigger == false && tip[2] < 0){
     		leap_trigger = true;
     		leap_start_sound();		
-    	}else if (leap_trigger == true && tip[2] < 0){
+    	}else if (leap_trigger == true && tip[2] > 0){
     		leap_trigger = false;
     		leap_stop_sound();
     	}

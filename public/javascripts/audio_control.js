@@ -13,7 +13,7 @@ var local_sound_choice = 0;
 var local_gain_node;
 /* the volume of local sound */
 var local_gain_value = 1;
-var beat_speed = 200;
+var beat_speed = 170;
 /* the time that the local player should fire for the next sound */
 var beat_next_time; 
 /* background beat's speed factor */
@@ -55,6 +55,7 @@ function buffer_loading_finished(bufferList) {
   console.log("Buffer loader compplete - loaded " + sound_source.length + " sounds");
   buffer_list_playable = bufferList;
   $("#loading").fadeOut();
+  show_tutorial();
   initialize_socket();
   attach_mouse_events();
   attach_key_events();
@@ -69,20 +70,69 @@ function buffer_loading_finished(bufferList) {
   },beat_speed*bg_factor); 
 }
 
+function show_tutorial(){
+  var duration = 3000;
+  var time = duration;
+  $("#t1").fadeIn();
+  $("#progressbar").animate({"width":"350"},duration);
+  setTimeout(function(){
+    $("#progressbar").animate({"width":"0"},0);
+    $("#t1").hide();
+    $("#t2").fadeIn();
+    $("#progressbar").animate({"width":"350"},duration);
+  },time)
+  time += duration;
+  setTimeout(function(){
+    $("#progressbar").animate({"width":"0"},0);
+    $("#t2").hide();
+    $("#t3").fadeIn();
+    $("#progressbar").animate({"width":"350"},duration);
+  },time)
+  time += duration;
+  setTimeout(function(){
+    $("#progressbar").fadeOut();
+    $("#t3").fadeOut();
+  },time)
+}
+
 // play a particular sound clip with a playlist, and the index in the playlist
 function local_play(playlist,index){
   if(typeof local_buffer_player !== "undefined"){
     local_buffer_player.stop(0);
   }
+
+  var compressor=ad_context.createDynamicsCompressor();
   local_buffer_player = ad_context.createBufferSource();
   local_buffer_player.buffer = playlist[index];
   // connect with gain mode
   local_gain_node = ad_context.createGainNode();
   local_buffer_player.connect(local_gain_node);
-  local_gain_node.connect(ad_context.destination);
   local_gain_node.gain.value = local_gain_value * 0.5;
+  local_gain_node.connect(compressor);
+  compressor.connect(ad_context.destination);
   local_buffer_player.start(0);
+
+  // echo effect
+  // var time = ad_context.currentTime;
+  // var g = local_gain_value;
+  // for (var i = 0; i < 2; i++) {
+  //   var source = makeSource(playlist[index],g);
+  //   g = g * 0.5;
+  //   source.start(time + 0.3 + i * 0.1);
+  // }
 }
+
+function makeSource(buffer,g){
+  var source=ad_context.createBufferSource();
+  var compressor=ad_context.createDynamicsCompressor();
+  var gain=ad_context.createGainNode();
+  gain.gain.value=g;
+  source.buffer=buffer;
+  source.connect(gain);
+  gain.connect(compressor);
+  compressor.connect(ad_context.destination);
+  return source;
+};
 
 function play_background_beats(playlist,index){
   if(typeof background_buffer_player !== "undefined"){
@@ -99,12 +149,14 @@ function remote_play(player_id, playlist,index,volume){
   if(typeof other_player_info[player_id].player !== "undefined"){
     other_player_info[player_id].player.stop(0);
   }
+  var compressor=ad_context.createDynamicsCompressor();
   other_player_info[player_id].player = ad_context.createBufferSource();
   other_player_info[player_id].player.buffer = playlist[index];
   // connect with gain node
   other_player_info[player_id].gain = ad_context.createGainNode();
   other_player_info[player_id].player.connect(other_player_info[player_id].gain);
-  other_player_info[player_id].gain.connect(ad_context.destination);
+  other_player_info[player_id].gain.connect(compressor);
+  compressor.connect(ad_context.destination);
   other_player_info[player_id].gain.gain.value = volume * 0.5;
   other_player_info[player_id].player.start(0);
 }

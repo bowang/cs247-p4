@@ -5,7 +5,7 @@ var line_num = 16 - 1;
 var circle_speed_x = 10;
 var circle_r = 5;
 var circles = new Array();
-var colors = ["#D30068", "#78E700", "#3914AF", "#7109AA", "#FFFF00", "#FF7400", "#009999", "#FFAA00"];
+var colors = ["#D30068", "#78E700", "#3914AF", "#7109AA", "#E467B3", "#FF7400", "#009999", "#FFAA00"];
 
 function Circle(x, y, r, filled, color_id) {
     this.x = x;
@@ -41,6 +41,9 @@ function remove_circle(circle) {
 }
 
 function init_vis_canvas() {
+    for (i = 1; i <= 8; i++) {
+        $('#sound_'+i).css('background', colors[i-1]);
+    }
     canvas = document.getElementById('canvas');
     if (canvas.getContext) {
         $(canvas).attr("width",$(window).width());

@@ -204,6 +204,7 @@ function attach_mouse_events(){
     clear_local_sound_time_out();
     mouse_down = false;
   });
+  $("#my_circle").show();
 }
 
 // leap functions

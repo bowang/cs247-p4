@@ -86,12 +86,12 @@ function draw() {
     var w = $(canvas).width();
     var h = $(canvas).height();
     ctx.clearRect(0, 0, w, h);
-    ctx.fillStyle = "#fafafa";
+    ctx.fillStyle = "#1c4170";
     ctx.fillRect(0, 0, w, h);
     var gap = $(canvas).height() / (line_num + 1);
     for (i = 0; i < line_num; i++) {
         var y = (i+1) * gap;
-        draw_line(0, y, w, y);
+        //draw_line(0, y, w, y);
     }
     add_circle(mouse_doc_x - $(canvas).position().left,
         mouse_doc_y - $(canvas).position().top,

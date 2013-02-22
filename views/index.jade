@@ -10,8 +10,10 @@ head
 	script(src="/javascripts/vis_control.js")
 	script(src="/javascripts/index.js")
 body
-	#my_circle
-	#leap_circle
+	#my_circle.hide
+		img(src="images/nyan.gif",width="200px")
+	#leap_circle.hide
+		img(src="images/nyan.gif",width="200px")
 	canvas#canvas(width="400px",height="400px")
 
 	#control
@@ -26,6 +28,7 @@ body
 			#sound_8.select_sound 8
 	#loading 
 		#loading_text loading...
+	#instrument_switch.hide 1
 	#tutorial
 		#progressbar
 		#t1.img.hide 

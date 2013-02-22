@@ -35,6 +35,7 @@ function init_leap() {
   // On successful connection
   ws.onopen = function(event) {
     document.getElementById("leap_connection").innerHTML = "LEAP: WebSocket connection open!";
+    $("#leap_circle").show();
   };
   
   // On message received
@@ -50,13 +51,18 @@ function init_leap() {
     	leap_y = tip[1];
       leap_x = tip[0];
       // detect swtiching instrument
-      if(Math.abs(leap_x-leap_x_previous)>20 && allow_instrument_switch == true){
+      if(Math.abs(leap_x-leap_x_previous)>40 && allow_instrument_switch == true){
         //console.log("drastic horizontal movement: "+ (leap_x-leap_x_previous));
         leap_select_sound(leap_x_previous-leap_x);
         allow_instrument_switch = false;
         setTimeout(function(){
           allow_instrument_switch = true;
-        },1000)
+        },1000);
+        $("#instrument_switch").css({"background":colors[local_sound_choice]});
+        $("#instrument_switch").text(local_sound_choice+1).show();
+        setTimeout(function(){
+          $("#instrument_switch").fadeOut(200);
+        },500)
       }
     	leap_screen_y = document_height - movement_speedup*document_height*((leap_y-80)/250.0);
     	if(Math.abs(leap_screen_y_previous - leap_y) > 0.1){
@@ -64,11 +70,11 @@ function init_leap() {
     		$("#leap_circle").css({left:leap_screen_x,top:leap_screen_y});
     	}
       // setup local gain value
-      local_gain_value = ((tip[2]/50) < 0)? (tip[2]/50) : 0;
-    	if(leap_trigger == false && tip[2] < 0){
+      local_gain_value = (tip[2] < 60)? 1-tip[2]/60 : 0;
+    	if(leap_trigger == false && tip[2] < 60){
     		leap_trigger = true;
     		leap_start_sound();		
-    	}else if (leap_trigger == true && tip[2] > 0){
+    	}else if (leap_trigger == true && tip[2] > 60){
     		leap_trigger = false;
     		leap_stop_sound();
     	}

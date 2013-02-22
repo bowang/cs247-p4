@@ -20,7 +20,7 @@ var beat_next_time;
 var bg_factor = 4;
 // sound source has all the sounds for the app
 var sound_source = [];
-var sound_type = ["8bit_stab","bassdist","bee_long","bziaou","drums","syntklocka_stab","voice","woody"];
+var sound_type = ["8bit_stab","bassdist","bee_long","bziaou","drums","syntklocka_stab","voice","woody","bass","corny","electro","pianobell","bell"];
 for(var i=0; i<sound_type.length;i++){
   for(var c=16; c>0; c--){
     sound_source.push("sound/"+sound_type[i]+"_"+c+".ogg");
@@ -170,7 +170,10 @@ function local_player_play_stream(){
   local_sound_interval_timeout = setInterval(function(){
     // wait until it is the right time to play
     setTimeout(function(){
-      local_play(buffer_list_playable,local_sound_choice*16+Math.floor(16*get_y_doc_range((mouse_doc_y)/document_height)));
+      var rand = Math.random();
+      if(rand > 0.3){
+        local_play(buffer_list_playable,local_sound_choice*16+Math.floor(16*get_y_doc_range((mouse_doc_y)/document_height)));
+      }
     },beat_next_time - (new Date()).getTime());
   },beat_speed);
 }
@@ -257,7 +260,7 @@ function initialize_socket(){
   socket = io.connect('/game');
   socket.on('other-motion', function (data) {
     if($("#"+data.id).length == 0){
-      $("body").append("<div id='"+data.id+"' class='other_circle'></div>")
+      $("body").append("<div id='"+data.id+"' class='other_circle'><img src='images/nyan.gif' width='100px'></div>")
     }
     if(typeof other_player_info[data.id] === "undefined"){
       other_player_info[data.id] = {};
@@ -287,7 +290,10 @@ function initialize_socket(){
     },beat_next_time - (new Date()).getTime());
     other_player_info[data.id].interval = setInterval(function(){
       setTimeout(function(){
-        remote_play(data.id,buffer_list_playable,other_player_info[data.id].c*16+Math.floor(16*get_y_doc_range(other_player_info[data.id].y/document_height)),other_player_info[data.id].g);
+        var rand = Math.random();
+        if(rand > 0.3){
+          remote_play(data.id,buffer_list_playable,other_player_info[data.id].c*16+Math.floor(16*get_y_doc_range(other_player_info[data.id].y/document_height)),other_player_info[data.id].g);
+        }
       },beat_next_time - (new Date()).getTime());
     },beat_speed);
 

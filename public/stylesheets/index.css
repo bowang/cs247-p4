@@ -47,6 +47,9 @@ body{
     top:0;
     left: 0;
 }
+.other_circle img{
+	margin-top: -25px;
+}
 #select_sound{
 	background: #fff;
 	border: 1px solid #CCC;

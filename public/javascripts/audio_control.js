@@ -20,7 +20,7 @@ var beat_next_time;
 var bg_factor = 4;
 // sound source has all the sounds for the app
 var sound_source = [];
-var sound_type = ["8bit_stab","bassdist","bee_long","bziaou","drums","syntklocka_stab","voice","woody","bass","corny","electro","pianobell","bell"];
+var sound_type = ["8bit_stab","bassdist","corny","bziaou","syntklocka_stab","bass","woody","bell","drums"];
 for(var i=0; i<sound_type.length;i++){
   for(var c=16; c>0; c--){
     sound_source.push("sound/"+sound_type[i]+"_"+c+".ogg");
@@ -71,6 +71,7 @@ function buffer_loading_finished(bufferList) {
 }
 
 function show_tutorial(){
+  $('img').mousedown(function(){return false});
   var duration = 3000;
   var time = duration;
   $("#t1").fadeIn();

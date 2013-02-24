@@ -6,7 +6,29 @@ var circle_speed_x = 10;
 var circle_r = 5;
 var circles = new Array();
 var colors = ["#D30068", "#78E700", "#3914AF", "#7109AA", "#E467B3", "#FF7400", "#009999", "#FFAA00","#CCAA00"];
-
+var cats = [
+        ["GBG.gif",-50],
+        ["GBauthentic.gif",-50],
+        ["america.gif",-50],
+        ["bday.gif",-130],
+        ["easter.gif",-50],
+        ["fat.gif",-50],
+        ["ganja.gif",-50],
+        ["j5.gif",-50],
+        ["jazz.gif",-50],
+        ["melon.gif",-50],
+        ["mexinyan.gif",-60],
+        ["mummy.gif",-50],
+        ["newyear.gif",-50],
+        ["nyaninja.gif",-40],
+        ["patty.gif",-110],
+        ["pikanyan.gif",-50],
+        ["pumpkin.gif",-50],
+        ["sad.gif",-50],
+        ["smurf.gif",-50],
+        ["vday.gif",-50],
+        ["xmas.gif",-50]
+];
 function Circle(x, y, r, filled, color_id) {
     this.x = x;
     this.y = y;
@@ -52,6 +74,9 @@ function init_vis_canvas() {
         ctx.translate(0.5, 0.5);
         setInterval(draw, refresh_interval);
     }
+    var my_cat = Math.floor(Math.random()*cats.length);
+    $(".cat_img img").attr("src","images/cats/"+cats[my_cat][0]);
+    $(".cat_img img").css("margin-top",cats[my_cat][1]+"px");
 }
 
 function draw_line(x0, y0, x1, y1) {

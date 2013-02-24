@@ -23,9 +23,6 @@ body{
     top:0;
     left: 0;
 }
-#my_circle img{
-    margin-top: -50px;
-}
 #leap_circle{
     width: 16px;
     height: 16px;
@@ -34,9 +31,6 @@ body{
     border-radius: 8px;
     top:0;
     left: 0;
-}
-#leap_circle img{
-    margin-top: -50px;
 }
 .other_circle{
     width: 12px;

@@ -36,6 +36,7 @@ function init_leap() {
   ws.onopen = function(event) {
     document.getElementById("leap_connection").innerHTML = "LEAP: WebSocket connection open!";
     $("#leap_circle").show();
+    $("#my_circle").hide();
   };
   
   // On message received

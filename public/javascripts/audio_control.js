@@ -66,7 +66,7 @@ function buffer_loading_finished(bufferList) {
   },beat_speed); 
   // set beat background sound
   setInterval(function(){
-    //play_background_beats(buffer_list_playable,16*total_sound_num);
+    play_background_beats(buffer_list_playable,16*total_sound_num);
   },beat_speed*bg_factor); 
 }
 

@@ -84,10 +84,12 @@ body{
 	margin: 5px;
 	width: 30px;
 	text-align: center;
+	opacity: 0.4;
 }
 .sel_highlighted{
 	text-shadow: 0 0 10px rgba(255, 255, 255, 1);
 	box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+	opacity: 1.0;
 }
 .hide{
 	display: none;

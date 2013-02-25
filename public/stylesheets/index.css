@@ -133,3 +133,11 @@ body{
     opacity: 0.6;
     line-height: 180px;
 }
+.arrow{
+	position: absolute;
+	height: 30px;
+	width: 10px;
+	background: #ccc;
+	margin-left: 10px;
+	display: none;
+}

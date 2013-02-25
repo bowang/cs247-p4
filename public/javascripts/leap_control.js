@@ -17,6 +17,8 @@ var message_counter = 0;
 // sample rate from leap's socket server
 var message_rate = 5;
 var allow_instrument_switch = true;
+var sel_timeout;
+var sel_arrow_show = false;
 
 // Support both the WebSocket and MozWebSocket objects
 if ((typeof(WebSocket) == 'undefined') &&
@@ -52,19 +54,37 @@ function init_leap() {
     	leap_y = tip[1];
       leap_x = tip[0];
       // detect swtiching instrument
-      if(Math.abs(leap_x-leap_x_previous)>40 && allow_instrument_switch == true){
-        //console.log("drastic horizontal movement: "+ (leap_x-leap_x_previous));
-        leap_select_sound(leap_x_previous-leap_x);
-        allow_instrument_switch = false;
-        setTimeout(function(){
-          allow_instrument_switch = true;
-        },1000);
-        $("#instrument_switch").css({"background":colors[local_sound_choice]});
-        $("#instrument_switch").text(local_sound_choice+1).show();
-        setTimeout(function(){
-          $("#instrument_switch").fadeOut(200);
-        },500)
+
+
+      if(obj.pointables.length == 5){
+        leap_x = obj.pointables[2].tipPosition[0];
+        console.log("Enter selection mode");
+        if(sel_arrow_show == false){
+          show_sel_arrow();
+          sel_arrow_show = true;
+        }
+          leap_select_sound(leap_x);
+          $("#instrument_switch").css({"background":colors[local_sound_choice]});
+          $("#instrument_switch").text(local_sound_choice+1).show();
+        return;
+      }else{
+        sel_arrow_show = false;
+        $("#instrument_switch").fadeOut(200);
+        clear_sel_arrow();
       }
+      // if(Math.abs(leap_x-leap_x_previous)>40 && allow_instrument_switch == true){
+      //   //console.log("drastic horizontal movement: "+ (leap_x-leap_x_previous));
+      //   leap_select_sound(leap_x_previous-leap_x);
+      //   allow_instrument_switch = false;
+      //   setTimeout(function(){
+      //     allow_instrument_switch = true;
+      //   },1000);
+      //   $("#instrument_switch").css({"background":colors[local_sound_choice]});
+      //   $("#instrument_switch").text(local_sound_choice+1).show();
+      //   setTimeout(function(){
+      //     $("#instrument_switch").fadeOut(200);
+      //   },500)
+      // }
     	leap_screen_y = document_height - movement_speedup*document_height*((leap_y-80)/250.0);
     	if(Math.abs(leap_screen_y_previous - leap_y) > 0.1){
     		leap_move(); // fire move only when finger actually move
@@ -94,4 +114,18 @@ function init_leap() {
   ws.onerror = function(event) {
     alert("LEAP: received error");
   };
+}
+
+function clear_sel_arrow(){
+  window.clearTimeout(sel_timeout);
+  $(".arrow").fadeOut();
+}
+
+function show_sel_arrow(){
+  $("#sound_"+(local_sound_choice+1)+" .arrow").show().animate({"margin-top":10},500);
+  sel_timeout = setTimeout(function(){
+    $(".arrow").hide();
+    $("#sound_"+(local_sound_choice+1)+" .arrow").animate({"margin-top":0},0);
+    show_sel_arrow();
+  },510)
 }

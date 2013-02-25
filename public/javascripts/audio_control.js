@@ -66,7 +66,7 @@ function buffer_loading_finished(bufferList) {
   },beat_speed); 
   // set beat background sound
   setInterval(function(){
-    play_background_beats(buffer_list_playable,16*total_sound_num);
+    //play_background_beats(buffer_list_playable,16*total_sound_num);
   },beat_speed*bg_factor); 
 }
 
@@ -241,15 +241,39 @@ function attach_key_events(){
 }
 
 // direction negative means incrementing sound
-function leap_select_sound(direction){
-    if(direction < 0){
-      if(local_sound_choice < total_sound_num - 1){
-        local_sound_choice += 1;
-      }
+// function leap_select_sound(direction){
+//     if(direction < 0){
+//       if(local_sound_choice < total_sound_num - 1){
+//         local_sound_choice += 1;
+//       }
+//     }else{
+//       if(local_sound_choice > 0){
+//         local_sound_choice -= 1;
+//       }
+//     }
+//     $(".select_sound").removeClass("sel_highlighted");
+//     $("#sound_"+(local_sound_choice+1)).addClass("sel_highlighted");
+// }
+
+function leap_select_sound(x){
+    if(x>40){
+      local_sound_choice = 8;
+    }else if(x>30){
+      local_sound_choice = 7;
+    }else if(x>20){
+      local_sound_choice = 6;
+    }else if(x>10){
+      local_sound_choice = 5;
+    }else if(x>0){
+      local_sound_choice = 4;
+    }else if(x>-10){
+      local_sound_choice = 3;
+    }else if(x>-20){
+      local_sound_choice = 2;
+    }else if(x>-30){
+      local_sound_choice = 1;
     }else{
-      if(local_sound_choice > 0){
-        local_sound_choice -= 1;
-      }
+      local_sound_choice = 0;
     }
     $(".select_sound").removeClass("sel_highlighted");
     $("#sound_"+(local_sound_choice+1)).addClass("sel_highlighted");

@@ -4,7 +4,10 @@ var refresh_interval = 20;
 var line_num = 16 - 1;
 var circle_speed_x = 10;
 var circle_r = 5;
+var note_r = 60;
+var note_speed_x = 8;
 var circles = new Array();
+var notes = new Array();
 var colors = ["#D30068", "#78E700", "#3914AF", "#7109AA", "#E467B3", "#FF7400", "#009999", "#FFAA00","#CCAA00"];
 var cats = [
         ["GBG.gif",-50],
@@ -41,6 +44,7 @@ function add_circle(x, y, r, fill, color_id) {
     var circle = new Circle(x, y, r, fill, color_id);
     circles.push(circle);
 }
+
 
 function add_circles(x, y, n) {
     add_circle(x, y, circle_r * (Math.random() + 0.5));
@@ -111,29 +115,117 @@ function draw() {
     var w = $(canvas).width();
     var h = $(canvas).height();
     ctx.clearRect(0, 0, w, h);
-    ctx.fillStyle = "#fafafa";
+    ctx.fillStyle = "#292929";
     ctx.fillRect(0, 0, w, h);
     var gap = $(canvas).height() / (line_num + 1);
     for (i = 0; i < line_num; i++) {
         var y = (i+1) * gap;
         //draw_line(0, y, w, y);
     }
-    add_circle(mouse_doc_x - $(canvas).position().left,
-        mouse_doc_y - $(canvas).position().top,
-        circle_r * (Math.random() + 0.5),
-        mouse_down||leap_trigger,
-        local_sound_choice);
+    // add_circle(mouse_doc_x - $(canvas).position().left,
+    //     mouse_doc_y - $(canvas).position().top,
+    //     circle_r * (Math.random() + 0.5),
+    //     mouse_down||leap_trigger,
+    //     local_sound_choice);
+
+    // for (var id in other_player_info) {
+    //     add_circle(other_player_info[id].x,
+    //         other_player_info[id].y,
+    //         circle_r * (Math.random() + 0.5),
+    //         other_player_info[id].mousedown,
+    //         other_player_info[id].c);
+    // }
+
+    // for (i = 0; i < circles.length; i++) {
+    //     draw_circle(circles[i]);
+    //     update_circle(circles[i]);
+    // }
+    var rand = Math.random();
+    if(rand > 0.8){
+        add_note(mouse_doc_x - $(canvas).position().left,
+            mouse_doc_y - $(canvas).position().top,
+            note_r * (Math.random() + 0.5),
+            mouse_down||leap_trigger,
+            local_sound_choice,
+            make_note(),
+            Math.random());
+    }
 
     for (var id in other_player_info) {
-        add_circle(other_player_info[id].x,
+        add_note(other_player_info[id].x,
             other_player_info[id].y,
-            circle_r * (Math.random() + 0.5),
+            note_r * (Math.random() + 0.5),
             other_player_info[id].mousedown,
-            other_player_info[id].c);
+            other_player_info[id].c,
+            make_note(),
+            Math.random());
     }
 
-    for (i = 0; i < circles.length; i++) {
-        draw_circle(circles[i]);
-        update_circle(circles[i]);
+    for (i = 0; i < notes.length; i++) {
+        draw_note(notes[i]);
+        update_note(notes[i]);
     }
 }
+
+//*****************************
+//
+// Notes section
+//
+// r represent note size
+function Note(x, y, r, filled, color_id,text,alpha) {
+    this.x = x;
+    this.y = y;
+    this.r = r;
+    this.t = text;
+    this.a = alpha;
+    this.color = colors[color_id];
+    this.filled = filled;
+}
+
+function add_note(x, y, r, fill, color_id,text,alpha) {
+    var note = new Note(x, y, r, fill, color_id,text,alpha);
+    notes.push(note);
+}
+
+function remove_note(note) {
+    var index = notes.indexOf(note);
+    if (index >= 0) {
+        notes.splice(index, 1);
+    }
+    else {
+        console.log("failed to find note");
+        console.log(note);
+    }
+}
+
+function draw_note(note) {
+    
+    if(note.filled){
+        ctx.globalAlpha = note.a;
+        ctx.fillStyle = note.color;
+    }else{
+        ctx.globalAlpha = note.a * 0.5;
+        ctx.fillStyle = "#666";
+    }
+    ctx.font = 'italic bold '+ note.r+'px Notes';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(note.t, note.x, note.y);
+    ctx.globalAlpha = 1.0;
+}
+
+function update_note(note) {
+    note.x -= note_speed_x;
+    note.y += Math.round((0.5-Math.random())*2);
+    if (note.x < -30) {
+        remove_note(note);
+    }
+}
+
+function make_note(){
+    var text = "";
+    var possible = "abcdefghijklmnopqrstuvwxyz";
+    for( var i=0; i < 1; i++ )
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+    return text;
+}
+

@@ -1,3 +1,11 @@
+@font-face {
+    font-family: "Notes";
+    src: url(ToneDeafBB.ttf) format("truetype");
+}
+#font-test{
+	font-family: "Notes";
+	font-size: 40px;
+}
 body{
     background: #1c4170;
     font-family: 'Titillium Web';
@@ -45,8 +53,6 @@ body{
 	margin-top: -25px;
 }
 #select_sound{
-	background: #fff;
-	border: 1px solid #CCC;
 	margin: 0 auto;
 	width: 450px;
 }
@@ -81,7 +87,7 @@ body{
 }
 .sel_highlighted{
 	text-shadow: 0 0 10px rgba(255, 255, 255, 1);
-	box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+	box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
 }
 .hide{
 	display: none;

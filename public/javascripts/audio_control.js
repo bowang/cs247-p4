@@ -193,18 +193,19 @@ function attach_mouse_events(){
     mouse_doc_x = e.pageX;
     mouse_doc_y = e.pageY;
     $("#my_circle").css({top:mouse_doc_y-10,left:mouse_doc_x-10});
-    socket.emit('user-motion', {id:my_id,x:mouse_doc_x,y:mouse_doc_y,c:local_sound_choice,g:local_gain_value});
+    socket.emit('user-motion', {id:my_id,x:mouse_doc_x,y:mouse_doc_y,c:local_sound_choice,g:local_gain_value,cat_id:my_cat});
+    socket.emit('user-select-cat', {id:my_id,x:mouse_doc_x,y:mouse_doc_y,c:local_sound_choice,g:local_gain_value,cat_id:my_cat});
   });
   $(document).mousedown(function(e){
     console.log("mouse down");
     local_gain_value = 1;
-    socket.emit('user-mousedown', {id:my_id,x:mouse_doc_x,y:mouse_doc_y,c:local_sound_choice,g:local_gain_value});
+    socket.emit('user-mousedown', {id:my_id,x:mouse_doc_x,y:mouse_doc_y,c:local_sound_choice,g:local_gain_value,cat_id:my_cat});
     local_player_play_stream();
     mouse_down = true;
   });
   $(document).mouseup(function(e){
     console.log("mouse up");
-    socket.emit('user-mouseup', {id:my_id,x:mouse_doc_x,y:mouse_doc_y,c:local_sound_choice,g:local_gain_value});
+    socket.emit('user-mouseup', {id:my_id,x:mouse_doc_x,y:mouse_doc_y,c:local_sound_choice,g:local_gain_value,cat_id:my_cat});
     clear_local_sound_time_out();
     mouse_down = false;
   });
@@ -213,19 +214,20 @@ function attach_mouse_events(){
 // leap functions
 function leap_start_sound(){
   console.log("leap start");
-  socket.emit('user-mousedown', {id:my_id,x:leap_screen_x,y:leap_screen_y,c:local_sound_choice,g:local_gain_value});
+  socket.emit('user-mousedown', {id:my_id,x:leap_screen_x,y:leap_screen_y,c:local_sound_choice,g:local_gain_value,cat_id:my_cat});
   local_player_play_stream();
 }
 function leap_stop_sound(){
   console.log("leap stop");
-  socket.emit('user-mouseup', {id:my_id,x:leap_screen_x,y:leap_screen_y,c:local_sound_choice,g:local_gain_value});
+  socket.emit('user-mouseup', {id:my_id,x:leap_screen_x,y:leap_screen_y,c:local_sound_choice,g:local_gain_value,cat_id:my_cat});
   clear_local_sound_time_out();
 }
 function leap_move(){
   // override mouse position
   mouse_doc_x = leap_screen_x;
   mouse_doc_y = leap_screen_y;
-  socket.emit('user-motion', {id:my_id,x:mouse_doc_x,y:mouse_doc_y,c:local_sound_choice,g:local_gain_value});
+  socket.emit('user-motion', {id:my_id,x:mouse_doc_x,y:mouse_doc_y,c:local_sound_choice,g:local_gain_value,cat_id:my_cat});
+  socket.emit('user-select-cat', {id:my_id,x:mouse_doc_x,y:mouse_doc_y,c:local_sound_choice,g:local_gain_value,cat_id:my_cat});
 }
 
 // attach keyboard event to the dom
@@ -325,6 +327,13 @@ function initialize_socket(){
   socket.on('other-mouseup', function (data) {
     window.clearInterval(other_player_info[data.id].interval);
     other_player_info[data.id].mousedown = false;
+  });
+  socket.on('other-select-cat', function (data) {
+      if (other_player_info[data.id].cat_id == null) {
+          other_player_info[data.id].cat_id = data.cat_id;
+          $('#'+data.id + ' img').attr('src', 'images/cats/' + cats[data.cat_id][0]);
+          $('#'+data.id + ' img').attr('margin-top', cats[data.cat_id][1]+'px');
+      }
   });
 }
 

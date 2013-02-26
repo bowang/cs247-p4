@@ -32,6 +32,7 @@ var cats = [
         ["vday.gif",-50],
         ["xmas.gif",-50]
 ];
+var my_cat;
 function Circle(x, y, r, filled, color_id) {
     this.x = x;
     this.y = y;
@@ -78,7 +79,7 @@ function init_vis_canvas() {
         ctx.translate(0.5, 0.5);
         setInterval(draw, refresh_interval);
     }
-    var my_cat = Math.floor(Math.random()*cats.length);
+    my_cat = Math.floor(Math.random()*cats.length);
     $(".cat_img img").attr("src","images/cats/"+cats[my_cat][0]);
     $(".cat_img img").css("margin-top",cats[my_cat][1]+"px");
 }

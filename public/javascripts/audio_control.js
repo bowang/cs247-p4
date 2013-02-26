@@ -66,7 +66,7 @@ function buffer_loading_finished(bufferList) {
   },beat_speed); 
   // set beat background sound
   setInterval(function(){
-    //play_background_beats(buffer_list_playable,16*total_sound_num);
+    play_background_beats(buffer_list_playable,16*total_sound_num);
   },beat_speed*bg_factor); 
 }
 
@@ -256,21 +256,21 @@ function attach_key_events(){
 // }
 
 function leap_select_sound(x){
-    if(x>40){
+    if(x>60){
       local_sound_choice = 8;
-    }else if(x>30){
+    }else if(x>45){
       local_sound_choice = 7;
-    }else if(x>20){
+    }else if(x>30){
       local_sound_choice = 6;
-    }else if(x>10){
+    }else if(x>15){
       local_sound_choice = 5;
     }else if(x>0){
       local_sound_choice = 4;
-    }else if(x>-10){
+    }else if(x>-15){
       local_sound_choice = 3;
-    }else if(x>-20){
-      local_sound_choice = 2;
     }else if(x>-30){
+      local_sound_choice = 2;
+    }else if(x>-45){
       local_sound_choice = 1;
     }else{
       local_sound_choice = 0;

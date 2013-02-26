@@ -115,7 +115,7 @@ function draw() {
     var w = $(canvas).width();
     var h = $(canvas).height();
     ctx.clearRect(0, 0, w, h);
-    ctx.fillStyle = "#292929";
+    ctx.fillStyle = "#191919";
     ctx.fillRect(0, 0, w, h);
     var gap = $(canvas).height() / (line_num + 1);
     for (i = 0; i < line_num; i++) {

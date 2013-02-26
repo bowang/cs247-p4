@@ -50,14 +50,13 @@ function init_leap() {
     var obj = JSON.parse(event.data);
     if(typeof obj.pointables !== "undefined" && typeof obj.pointables[0] !== "undefined"){
     	var tip = obj.pointables[0].tipPosition;
-    	//document.getElementById("leap_status").innerHTML = '<pre>' + tip[0] +"<br/>"+tip[1]+"<br/>"+tip[2]+ '</pre>';
+    	document.getElementById("leap_status").innerHTML = '<pre>' + tip[0] +"<br/>"+tip[1]+"<br/>"+tip[2]+ '</pre>';
     	leap_y = tip[1];
       leap_x = tip[0];
       // detect swtiching instrument
 
-
       if(obj.pointables.length == 5){
-        leap_x = obj.pointables[2].tipPosition[0];
+        leap_x = (obj.pointables[0].tipPosition[0]+obj.pointables[1].tipPosition[0]+obj.pointables[2].tipPosition[0]+obj.pointables[3].tipPosition[0]+obj.pointables[4].tipPosition[0])/5;
         console.log("Enter selection mode");
         if(sel_arrow_show == false){
           show_sel_arrow();
@@ -117,15 +116,9 @@ function init_leap() {
 }
 
 function clear_sel_arrow(){
-  window.clearTimeout(sel_timeout);
-  $(".arrow").fadeOut();
+  $(".arrow").fadeOut(100);
 }
 
 function show_sel_arrow(){
-  $("#sound_"+(local_sound_choice+1)+" .arrow").show().animate({"margin-top":10},500);
-  sel_timeout = setTimeout(function(){
-    $(".arrow").hide();
-    $("#sound_"+(local_sound_choice+1)+" .arrow").animate({"margin-top":0},0);
-    show_sel_arrow();
-  },510)
+  $("#sound_"+(local_sound_choice+1)+" .arrow").show();
 }

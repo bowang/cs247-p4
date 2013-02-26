@@ -141,7 +141,7 @@ function draw() {
     //     update_circle(circles[i]);
     // }
     var rand = Math.random();
-    if(rand > 0.8){
+    if(rand > 0.5){
         add_note(mouse_doc_x - $(canvas).position().left,
             mouse_doc_y - $(canvas).position().top,
             note_r * (Math.random() + 0.5),

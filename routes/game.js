@@ -45,10 +45,11 @@ module.exports = function()
 			broadcastToAll("other-mouseup",data);
 		});
 
-        socket.on('user-select-cat', function(data) {
-            socket.game_id = data.id;
-            broadcastToAll("other-select-cat",data);
-        });
+        // socket.on('user-select-cat', function(data) {
+        //     socket.game_id = data.id;
+        //     broadcastToAll("other-select-cat",data);
+        // });
+
 		//broad cast connection status
 		function dispatchStatus(){
 			//var i=0; for (p in participants_con) i++;

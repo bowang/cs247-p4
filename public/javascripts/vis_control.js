@@ -33,42 +33,43 @@ var cats = [
         ["xmas.gif",-50]
 ];
 
-var bg_colors = ["#141415","#1b1b1d","#1d1e21","#202025","#232428","#25262b","#28292f","#2b2c34","#2d2f37","#32353f","#393d4d","#3b4155","#424861","#444c68","#485173"," #4a547a"];
+var bg_colors = gen_gradient("141415","4a547a"); //["#141415","#1b1b1d","#1d1e21","#202025","#232428","#25262b","#28292f","#2b2c34","#2d2f37","#32353f","#393d4d","#3b4155","#424861","#444c68","#485173"," #4a547a"];
 var bg_color_num = bg_colors.length;
 var my_cat;
-function Circle(x, y, r, filled, color_id) {
-    this.x = x;
-    this.y = y;
-    this.r = r;
-    this.color = colors[color_id];
-    this.filled = filled;
-}
 
-function add_circle(x, y, r, fill, color_id) {
-    var circle = new Circle(x, y, r, fill, color_id);
-    circles.push(circle);
-}
+// function Circle(x, y, r, filled, color_id) {
+//     this.x = x;
+//     this.y = y;
+//     this.r = r;
+//     this.color = colors[color_id];
+//     this.filled = filled;
+// }
+
+// function add_circle(x, y, r, fill, color_id) {
+//     var circle = new Circle(x, y, r, fill, color_id);
+//     circles.push(circle);
+// }
 
 
-function add_circles(x, y, n) {
-    add_circle(x, y, circle_r * (Math.random() + 0.5));
-    for (i = 1; i < n; i++) {
-        setTimeout(function(){
-            add_circle(x, y, circle_r * (Math.random() + 0.5));
-        }, refresh_interval * i);
-    }
-}
+// function add_circles(x, y, n) {
+//     add_circle(x, y, circle_r * (Math.random() + 0.5));
+//     for (i = 1; i < n; i++) {
+//         setTimeout(function(){
+//             add_circle(x, y, circle_r * (Math.random() + 0.5));
+//         }, refresh_interval * i);
+//     }
+// }
 
-function remove_circle(circle) {
-    var index = circles.indexOf(circle);
-    if (index >= 0) {
-        circles.splice(index, 1);
-    }
-    else {
-        console.log("failed to find circle");
-        console.log(circle);
-    }
-}
+// function remove_circle(circle) {
+//     var index = circles.indexOf(circle);
+//     if (index >= 0) {
+//         circles.splice(index, 1);
+//     }
+//     else {
+//         console.log("failed to find circle");
+//         console.log(circle);
+//     }
+// }
 
 function init_vis_canvas() {
     for (i = 1; i <= 9; i++) {
@@ -102,24 +103,24 @@ function draw_line(x0, y0, x1, y1) {
     ctx.stroke();
 }
 
-function draw_circle(circle) {
-    ctx.lineWidth = 1;
-    ctx.strokeStyle = circle.color;
-    ctx.beginPath();
-    ctx.arc(circle.x, circle.y, circle.r, 0, Math.PI*2, true);
-    if (circle.filled) {
-        ctx.fillStyle = circle.color;
-        ctx.fill();
-    }
-    ctx.stroke();
-}
+// function draw_circle(circle) {
+//     ctx.lineWidth = 1;
+//     ctx.strokeStyle = circle.color;
+//     ctx.beginPath();
+//     ctx.arc(circle.x, circle.y, circle.r, 0, Math.PI*2, true);
+//     if (circle.filled) {
+//         ctx.fillStyle = circle.color;
+//         ctx.fill();
+//     }
+//     ctx.stroke();
+// }
 
-function update_circle(circle) {
-    circle.x -= circle_speed_x;
-    if (circle.x < 0) {
-        remove_circle(circle);
-    }
-}
+// function update_circle(circle) {
+//     circle.x -= circle_speed_x;
+//     if (circle.x < 0) {
+//         remove_circle(circle);
+//     }
+// }
 
 function draw() {
     var w = $(canvas).width();
@@ -128,7 +129,7 @@ function draw() {
     ctx.fillStyle = "#191919";
     ctx.fillRect(0, 0, w, h);
     var gap = $(canvas).height() / bg_color_num-1 ;
-    for(var i=0; i<bg_color_num-1; i++){
+    for(var i=0; i<bg_color_num; i++){
         draw_rect(i*gap,$(window).width(),gap,bg_colors[bg_color_num-1-i]);
     }
     // for (i = 0; i < line_num; i++) {
@@ -240,5 +241,20 @@ function make_note(){
     for( var i=0; i < 1; i++ )
         text += possible.charAt(Math.floor(Math.random() * possible.length));
     return text;
+}
+
+
+// helper functions
+function gen_gradient(c_a,c_b){
+    var numberOfItems = 10;
+    var rainbow = new Rainbow(); 
+    rainbow.setNumberRange(1, numberOfItems);
+    rainbow.setSpectrum(c_a, c_b);
+    var s = [];
+    for (var i = 1; i <= numberOfItems; i++) {
+        var hexColour = rainbow.colourAt(i);
+        s.push('#' + hexColour);
+    }
+    return s;
 }
 

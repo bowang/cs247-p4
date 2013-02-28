@@ -8,7 +8,7 @@ var note_r = 60;
 var note_speed_x = 8;
 var circles = new Array();
 var notes = new Array();
-var colors = ["#7ef1d7", "#beceff", "#a1fb96", "#e6c3ff", "#e7fc7a", "#95daff", "#fcf777", "#ff8d43", "#ff5a57"];
+var colors = ["#ff5a57","#ff8d43","#fcf777","#e7fc7a","#a1fb96","#7ef1d7","#95daff","#beceff","#e6c3ff"];
 var cats = [
         ["GBG.gif",-50],
         ["GBauthentic.gif",-50],
@@ -72,9 +72,9 @@ var my_cat;
 // }
 
 function init_vis_canvas() {
-    for (i = 1; i <= 9; i++) {
-        $('#sound_'+i).css('background', colors[i-1]);
-    }
+//    for (i = 1; i <= 9; i++) {
+//        $('#sound_'+i).css('background', colors[i-1]);
+//    }
     canvas = document.getElementById('canvas');
     if (canvas.getContext) {
         $(canvas).attr("width",$(window).width());

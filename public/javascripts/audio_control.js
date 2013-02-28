@@ -20,7 +20,8 @@ var beat_next_time;
 var bg_factor = 4;
 // sound source has all the sounds for the app
 var sound_source = [];
-var sound_type = ["8bit_stab","bassdist","corny","bziaou","syntklocka_stab","bass","woody","bell","drums"];
+var sound_type = ["drums","bell","woody","syntklocka_stab","corny","8bit_stab","bass","bassdist","bziaou"];
+
 for(var i=0; i<sound_type.length;i++){
   for(var c=16; c>0; c--){
     sound_source.push("sound/"+sound_type[i]+"_"+c+".ogg");

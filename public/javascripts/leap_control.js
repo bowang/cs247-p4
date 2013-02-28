@@ -18,7 +18,6 @@ var message_counter = 0;
 var message_rate = 5;
 var allow_instrument_switch = true;
 var sel_timeout;
-var sel_arrow_show = false;
 
 // Support both the WebSocket and MozWebSocket objects
 if ((typeof(WebSocket) == 'undefined') &&
@@ -58,16 +57,12 @@ function init_leap() {
       if(obj.pointables.length == 5){
         leap_x = (obj.pointables[0].tipPosition[0]+obj.pointables[1].tipPosition[0]+obj.pointables[2].tipPosition[0]+obj.pointables[3].tipPosition[0]+obj.pointables[4].tipPosition[0])/5;
         console.log("Enter selection mode");
-        if(sel_arrow_show == false){
           show_sel_arrow();
-          sel_arrow_show = true;
-        }
           leap_select_sound(leap_x);
           $("#instrument_switch").css({"background":colors[local_sound_choice]});
           $("#instrument_switch").text(local_sound_choice+1).show();
         return;
       }else{
-        sel_arrow_show = false;
         $("#instrument_switch").fadeOut(200);
         clear_sel_arrow();
       }
@@ -85,6 +80,18 @@ function init_leap() {
       //   },500)
       // }
     	leap_screen_y = document_height - movement_speedup*document_height*((leap_y-80)/250.0);
+      leap_screen_x = document_width - movement_speedup*document_width*((80-leap_x)/250.0);
+      if(leap_screen_x < 50){
+        leap_screen_x = 50;
+      }else if(leap_screen_x > document_width){
+        leap_screen_x = document_width - 100;
+      }
+      if(leap_screen_y < 50){
+        leap_screen_y = 50;
+      }else if(leap_screen_y > document_height){
+        leap_screen_y = document_height - 100;
+      }
+
     	if(Math.abs(leap_screen_y_previous - leap_y) > 0.1){
     		leap_move(); // fire move only when finger actually move
     		$("#leap_circle").css({left:leap_screen_x,top:leap_screen_y});
@@ -120,5 +127,6 @@ function clear_sel_arrow(){
 }
 
 function show_sel_arrow(){
+  $(".arrow").fadeOut(100);
   $("#sound_"+(local_sound_choice+1)+" .arrow").show();
 }

@@ -33,9 +33,10 @@ var cats = [
         ["xmas.gif",-50]
 ];
 
-var bg_colors = gen_gradient("141415","4a547a"); //["#141415","#1b1b1d","#1d1e21","#202025","#232428","#25262b","#28292f","#2b2c34","#2d2f37","#32353f","#393d4d","#3b4155","#424861","#444c68","#485173"," #4a547a"];
+var bg_colors = gen_gradient("2c2c2d","464f71"); //["#141415","#1b1b1d","#1d1e21","#202025","#232428","#25262b","#28292f","#2b2c34","#2d2f37","#32353f","#393d4d","#3b4155","#424861","#444c68","#485173"," #4a547a"];
 var bg_color_num = bg_colors.length;
 var my_cat;
+var bg_img;
 
 // function Circle(x, y, r, filled, color_id) {
 //     this.x = x;
@@ -75,6 +76,8 @@ function init_vis_canvas() {
 //    for (i = 1; i <= 9; i++) {
 //        $('#sound_'+i).css('background', colors[i-1]);
 //    }
+    bg_img = new Image();
+    bg_img.src = "images/bg.jpg";
     canvas = document.getElementById('canvas');
     if (canvas.getContext) {
         $(canvas).attr("width",$(window).width());
@@ -129,10 +132,11 @@ function draw() {
     ctx.clearRect(0, 0, w, h);
     ctx.fillStyle = "#191919";
     ctx.fillRect(0, 0, w, h);
-    var gap = $(canvas).height() / bg_color_num-1 ;
-    for(var i=0; i<bg_color_num; i++){
-        draw_rect(i*gap,$(window).width(),gap,bg_colors[bg_color_num-1-i]);
-    }
+    ctx.drawImage(bg_img, 0, 0,w,h);
+    // var gap = $(canvas).height() / bg_color_num-1 ;
+    // for(var i=0; i<bg_color_num; i++){
+    //     draw_rect(i*gap,$(window).width(),gap,bg_colors[bg_color_num-1-i]);
+    // }
     // for (i = 0; i < line_num; i++) {
     //     var y = (i+1) * gap;
     //     draw_line(0, y, w, y);
@@ -246,7 +250,7 @@ function make_note(){
 
 // helper functions
 function gen_gradient(c_a,c_b){
-    var numberOfItems = 10;
+    var numberOfItems = 16;
     var rainbow = new Rainbow(); 
     rainbow.setNumberRange(1, numberOfItems);
     rainbow.setSpectrum(c_a, c_b);

@@ -54,7 +54,7 @@ body{
 }
 #select_sound{
 	margin: 0 auto;
-	width: 450px;
+	width: 900px;
 }
 #control{
 	position: fixed;
@@ -82,7 +82,7 @@ body{
 	padding: 5px;
 	display: inline-block;
 	margin: 5px;
-	width: 30px;
+	width: 75px;
 	text-align: center;
 	opacity: 0.6;
 	border-radius: 10px;
@@ -136,10 +136,11 @@ body{
 }
 .arrow{
 	position: absolute;
-	height: 30px;
-	width: 10px;
+	height: 5px;
+	width: 5px;
+	border-radius: 5px;
 	background: #ccc;
-	margin-left: 10px;
+	margin-left: 35px;
 	display: none;
-	margin-top: 10px;
+	margin-top: 15px;
 }

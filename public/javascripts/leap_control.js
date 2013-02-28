@@ -79,18 +79,24 @@ function init_leap() {
       //     $("#instrument_switch").fadeOut(200);
       //   },500)
       // }
+
+      // un lock the x position of leap
     	leap_screen_y = document_height - movement_speedup*document_height*((leap_y-80)/250.0);
-      leap_screen_x = document_width - movement_speedup*document_width*((80-leap_x)/250.0);
-      if(leap_screen_x < 50){
-        leap_screen_x = 50;
-      }else if(leap_screen_x > document_width){
-        leap_screen_x = document_width - 100;
-      }
-      if(leap_screen_y < 50){
-        leap_screen_y = 50;
-      }else if(leap_screen_y > document_height){
-        leap_screen_y = document_height - 100;
-      }
+
+      // leap free play mode
+      //leap_select_sound(leap_x);
+      
+      //  leap_screen_x = document_width - movement_speedup*document_width*((80-leap_x)/250.0);
+      //  if(leap_screen_x < 50){
+      //    leap_screen_x = 50;
+      //  }else if(leap_screen_x > document_width){
+      //    leap_screen_x = document_width - 100;
+      //  }
+       if(leap_screen_y < 50){
+         leap_screen_y = 50;
+       }else if(leap_screen_y > document_height){
+         leap_screen_y = document_height - 100;
+       }
 
     	if(Math.abs(leap_screen_y_previous - leap_y) > 0.1){
     		leap_move(); // fire move only when finger actually move

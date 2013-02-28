@@ -8,7 +8,7 @@ var note_r = 60;
 var note_speed_x = 8;
 var circles = new Array();
 var notes = new Array();
-var colors = ["#D30068", "#78E700", "#4994AF", "#7149AA", "#E467B3", "#FF7400", "#009999", "#FFAA00","#CCAA00"];
+var colors = ["#7ef1d7", "#beceff", "#a1fb96", "#e6c3ff", "#e7fc7a", "#95daff", "#fcf777", "#ff8d43", "#ff5a57"];
 var cats = [
         ["GBG.gif",-50],
         ["GBauthentic.gif",-50],

@@ -83,6 +83,7 @@ function init_vis_canvas() {
         ctx.translate(0.5, 0.5);
         setInterval(draw, refresh_interval);
     }
+    show_cat_select();
     my_cat = Math.floor(Math.random()*cats.length);
     $(".cat_img img").attr("src","images/cats/"+cats[my_cat][0]);
     $(".cat_img img").css("margin-top",cats[my_cat][1]+"px");
@@ -243,7 +244,6 @@ function make_note(){
     return text;
 }
 
-
 // helper functions
 function gen_gradient(c_a,c_b){
     var numberOfItems = 10;
@@ -258,3 +258,8 @@ function gen_gradient(c_a,c_b){
     return s;
 }
 
+function show_cat_select(){
+    for (cat in cats) {
+        $('.ContentFlow .flow').append('<img class="item" src="/images/cats/' + cats[cat][0] + '"/>');
+    }
+}

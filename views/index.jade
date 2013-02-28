@@ -10,6 +10,7 @@ head
 	script(src="/javascripts/audio_control.js")
 	script(src="/javascripts/vis_control.js")
 	script(src="/javascripts/index.js")
+	script(src="/ContentFlow/contentflow.js")
 body
 	#my_circle
 		.cat_img 
@@ -50,6 +51,14 @@ body
 			img(src="images/instruction2.jpg")
 		#t3.img.hide 
 			img(src="images/instruction3.jpg")
+	.ContentFlow
+		.loadIndicator
+			.indicator
+		.flow
+		.globalCaption
+		.scrollbar
+			.slider
+				.position
 	#leap_connection.hide
 	#leap_status
 	#status.hide

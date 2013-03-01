@@ -239,6 +239,8 @@ function attach_key_events(){
       $(".select_sound").removeClass("sel_highlighted");
       local_sound_choice = e.which - 49;
       $("#sound_"+(local_sound_choice+1)).addClass("sel_highlighted");
+    }else if(e.which == 76){
+      d_log(); // output log
     }
   });
 }

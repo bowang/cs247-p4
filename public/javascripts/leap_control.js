@@ -85,7 +85,7 @@ function init_leap() {
 
       // leap free play mode
       //leap_select_sound(leap_x);
-      
+
       //  leap_screen_x = document_width - movement_speedup*document_width*((80-leap_x)/250.0);
       //  if(leap_screen_x < 50){
       //    leap_screen_x = 50;

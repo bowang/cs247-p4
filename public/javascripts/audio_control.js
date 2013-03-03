@@ -21,6 +21,7 @@ var bg_factor = 4;
 // sound source has all the sounds for the app
 var sound_source = [];
 var sound_type = ["drums","bell","woody","syntklocka_stab","corny","8bit_stab","bass","bassdist","bziaou"];
+var sound_freq = ["0.3","0.3","0.3","0.3","0.3","0.5","0.5","0.5","0.7"];
 
 for(var i=0; i<sound_type.length;i++){
   for(var c=16; c>0; c--){
@@ -173,7 +174,7 @@ function local_player_play_stream(){
     // wait until it is the right time to play
     setTimeout(function(){
       var rand = Math.random();
-      if(rand > 0.3){
+      if(rand > sound_freq[local_sound_choice]){
         local_play(buffer_list_playable,local_sound_choice*16+Math.floor(16*get_y_doc_range((mouse_doc_y)/document_height)));
       }
     },beat_next_time - (new Date()).getTime());
@@ -325,7 +326,7 @@ function initialize_socket(){
     other_player_info[data.id].interval = setInterval(function(){
       setTimeout(function(){
         var rand = Math.random();
-        if(rand > 0.3){
+        if(rand > sound_freq[other_player_info[data.id].c]){
           remote_play(data.id,buffer_list_playable,other_player_info[data.id].c*16+Math.floor(16*get_y_doc_range(other_player_info[data.id].y/document_height)),other_player_info[data.id].g);
         }
       },beat_next_time - (new Date()).getTime());

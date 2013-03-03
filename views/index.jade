@@ -12,12 +12,14 @@ head
 	script(src="/javascripts/index.js")
 	script(src="/ContentFlow/contentflow.js")
 body
-	#my_circle
+	#my_circle.hide
 		.cat_img 
 			img(src="images/nyan.gif",width="200px")
 	#leap_circle.hide
 		.cat_img 
 			img(src="images/nyan.gif",width="200px")
+		.tutorial_img
+			img(src="images/point.png",width="500px",style="margin-left:100px;margin-top:-80px")
 	canvas#canvas(width="400px",height="400px")
 
 	#control
@@ -50,7 +52,7 @@ body
 				img(src="images/instruments/instrument_9.png",width="60px")
 				.arrow
 	#loading 
-		#loading_text loading...
+		#loading_text
 	#instrument_switch.hide 0
 	#tutorial
 		#progressbar
@@ -65,6 +67,7 @@ body
 			.indicator
 		.flow
 		.globalCaption
+	#count_down 
 	#leap_connection.hide
 	#leap_status
 	#status.hide

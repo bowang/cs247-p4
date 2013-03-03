@@ -32,9 +32,13 @@ var cats = [
         ["vday.gif",-50],
         ["xmas.gif",-50]
 ];
+var count_down_interval;
+var count_down_val = 5;
+var tutorial_img_interval;
 
 var bg_colors = gen_gradient("2c2c2d","464f71"); //["#141415","#1b1b1d","#1d1e21","#202025","#232428","#25262b","#28292f","#2b2c34","#2d2f37","#32353f","#393d4d","#3b4155","#424861","#444c68","#485173"," #4a547a"];
 var bg_color_num = bg_colors.length;
+var my_cat_flow;
 var my_cat;
 var bg_img;
 
@@ -87,9 +91,8 @@ function init_vis_canvas() {
         setInterval(draw, refresh_interval);
     }
     show_cat_select();
-    my_cat = Math.floor(Math.random()*cats.length);
-    $(".cat_img img").attr("src","images/cats/"+cats[my_cat][0]);
-    $(".cat_img img").css("margin-top",cats[my_cat][1]+"px");
+    
+    
 }
 
 
@@ -263,9 +266,41 @@ function gen_gradient(c_a,c_b){
 }
 
 function show_cat_select(){
+    my_cat_flow = new ContentFlow('cat_select', {});
     for (cat in cats) {
-        $('.ContentFlow .flow').append('<img class="item" src="/images/cats/' + cats[cat][0] + '"/>');
+        $('.ContentFlow .flow').append('<img class="item" href="javascript:cat_selected()" src="/images/cats/' + cats[cat][0] + '"/>');
     }
+    setTimeout(function(){start_count_down();},300);
+}
+
+function cat_selected(){
+    my_cat=get_active_cat();
+    $(".cat_img img").attr("src","images/cats/"+cats[my_cat][0]);
+    $(".cat_img img").css("margin-top",cats[my_cat][1]+"px");
+    $("#cat_select").hide();
+    $("#loading").fadeOut();
+    $("#my_circle").show();
+    //show_tutorial();
+    tutorial_img_interval = setInterval(function(){
+        $(".tutorial_img").hide().fadeIn(600);
+    },600);
+    setTimeout(function(){
+        $(".tutorial_img").fadeOut();
+        clearInterval(tutorial_img_interval);
+    },3600);
+    start_log();
+}
+
+function start_count_down(){
+  count_down_interval = setInterval(function(){
+    $("#loading").html("Choose a cat [" + count_down_val+"]");
+    count_down_val -= 1;
+    if(count_down_val == -1){
+      clearInterval(count_down_interval);
+      cat_selected();
+      cat_selection = false;
+    }
+  },900);
 }
 
 function get_active_cat(){

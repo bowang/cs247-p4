@@ -56,8 +56,6 @@ function create_audio_context(){
 function buffer_loading_finished(bufferList) {
   console.log("Buffer loader compplete - loaded " + sound_source.length + " sounds");
   buffer_list_playable = bufferList;
-  $("#loading").fadeOut();
-  show_tutorial();
   initialize_socket();
   attach_mouse_events();
   attach_key_events();

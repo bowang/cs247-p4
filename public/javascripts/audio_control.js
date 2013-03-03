@@ -294,9 +294,11 @@ function initialize_socket(){
     if(typeof other_player_info[data.id] === "undefined"){
       other_player_info[data.id] = {};
       other_player_info[data.id].a = data.a;
-      $('#'+data.id + ' img').attr('src', 'images/cats/' + cats[data.a][0]);
-      $('#'+data.id + ' img').attr('margin-top', cats[data.a][1]+'px');
     }
+
+    // need to improve effeciency
+    $('#'+data.id + ' img').attr('src', 'images/cats/' + cats[data.a][0]);
+    $('#'+data.id + ' img').attr('margin-top', cats[data.a][1]+'px');
 
     other_player_info[data.id].x = data.x;
     other_player_info[data.id].y = data.y;

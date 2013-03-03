@@ -267,3 +267,14 @@ function show_cat_select(){
         $('.ContentFlow .flow').append('<img class="item" src="/images/cats/' + cats[cat][0] + '"/>');
     }
 }
+
+function get_active_cat(){
+    var img_path = $('#cat_select .active canvas').attr('src');
+    var segments = img_path.split('/');
+    var img_name = segments[segments.length - 1];
+    for (i = 0; i < cats.length; i++) {
+        if (img_name == cats[i][0])
+            return i;
+    }
+    return -1;
+}

@@ -9,7 +9,7 @@ var local_buffer_player;
 /* buffer player for background beats */
 var background_buffer_player;
 var local_sound_interval_timeout;
-var local_sound_choice = 0;
+var local_sound_choice = 4;
 var local_gain_node;
 /* the volume of local sound */
 var local_gain_value = 1;

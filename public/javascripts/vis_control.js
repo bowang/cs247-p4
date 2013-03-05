@@ -281,13 +281,13 @@ function cat_selected(){
     $("#loading").fadeOut();
     $("#my_circle").show();
     show_tutorial();
-    tutorial_img_interval = setInterval(function(){
-        $(".tutorial_img").hide().fadeIn(600);
-    },600);
-    setTimeout(function(){
-        $(".tutorial_img").fadeOut();
-        clearInterval(tutorial_img_interval);
-    },3600);
+    // tutorial_img_interval = setInterval(function(){
+    //     $(".tutorial_img").hide().fadeIn(600);
+    // },600);
+    // setTimeout(function(){
+    //     $(".tutorial_img").fadeOut();
+    //     clearInterval(tutorial_img_interval);
+    // },3600);
     start_log();
 }
 

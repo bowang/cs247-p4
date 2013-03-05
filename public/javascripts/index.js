@@ -19,7 +19,7 @@ function start_log(){
 				c:my_cat
 			});
 		},100);
-	},5000);
+	},15000);
 }
 
 // fire this function in console or press shift and L for log

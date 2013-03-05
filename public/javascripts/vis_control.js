@@ -270,7 +270,7 @@ function show_cat_select(){
     for (cat in cats) {
         $('.ContentFlow .flow').append('<img class="item" href="javascript:cat_selected()" src="/images/cats/' + cats[cat][0] + '"/>');
     }
-    setTimeout(function(){start_count_down();},300);
+    setTimeout(function(){start_count_down();},2000);
 }
 
 function cat_selected(){
@@ -280,7 +280,7 @@ function cat_selected(){
     $("#cat_select").hide();
     $("#loading").fadeOut();
     $("#my_circle").show();
-    //show_tutorial();
+    show_tutorial();
     tutorial_img_interval = setInterval(function(){
         $(".tutorial_img").hide().fadeIn(600);
     },600);

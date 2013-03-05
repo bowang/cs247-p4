@@ -72,7 +72,7 @@ function buffer_loading_finished(bufferList) {
 
 function show_tutorial(){
   $('img').mousedown(function(){return false});
-  var duration = 3000;
+  var duration = 5000;
   var time = duration;
   $("#t1").fadeIn();
   $("#progressbar").animate({"width":"350"},duration);

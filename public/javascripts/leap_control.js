@@ -92,7 +92,7 @@ function init_leap() {
         // }
 
         // unlock the x position of leap
-        leap_screen_y = document_height - movement_speedup*document_height*((leap_y-80)/250.0);
+        leap_screen_y = document_height - movement_speedup*document_height*((leap_y-150)/250.0);
 
         //  leap free play mode
         //  leap_select_sound(leap_x);

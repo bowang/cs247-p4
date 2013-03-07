@@ -240,6 +240,12 @@ function attach_key_events(){
       $("#sound_"+(local_sound_choice+1)).addClass("sel_highlighted");
     }else if(e.which == 76){
       d_log(); // output log
+    }else if(e.which == 72){
+      emotion = "H";
+    }else if(e.which == 83){
+      emotion = "S";
+    }else if(e.which == 65){
+      emotion = "A";
     }
   });
 }

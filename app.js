@@ -7,7 +7,7 @@ var express = require('express')
   , routes = require('./routes')
   , http = require('http');
 var app = express();
-var server = app.listen(3000);
+var server = app.listen(80);
 global.socket = require('socket.io').listen(server);
 global.socket.set('log level', 1);
 var game = require('./routes/game'); 

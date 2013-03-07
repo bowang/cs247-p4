@@ -1,5 +1,6 @@
 var log = [];
 var log_interval_handle;
+var emotion = "U";
 $(document).ready(function(){
     create_audio_context();
     init_vis_canvas();
@@ -16,7 +17,8 @@ function start_log(){
 				v:local_gain_value,
 				x:mouse_doc_x,
 				y:mouse_doc_y,
-				c:my_cat
+				c:my_cat,
+				e:emotion
 			});
 		},100);
 	},15000);

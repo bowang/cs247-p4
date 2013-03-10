@@ -122,7 +122,7 @@ function draw() {
     // generate note
     if(cat_selection) return;
     var rand = Math.random();
-    if(rand > 0.5){
+    if(rand > 0.7){
         if(mouse_down||leap_trigger){ // perf improvement
             add_note(mouse_doc_x - $(canvas).position().left,
                 mouse_doc_y - $(canvas).position().top,
@@ -137,7 +137,7 @@ function draw() {
     for (var id in other_player_info) {
         if(other_player_info[id].mousedown){ // perf inprovement
             var rand = Math.random();
-            if(rand > 0.5){
+            if(rand > 0.7){
                 add_note(other_player_info[id].x,
                     other_player_info[id].y,
                     note_r * (Math.random() + 0.5),

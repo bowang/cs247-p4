@@ -124,7 +124,7 @@ function draw() {
             mouse_down||leap_trigger,
             local_sound_choice,
             make_note(),
-            Math.random());
+            Math.random()*local_gain_value);
     }
 
     for (var id in other_player_info) {

@@ -97,13 +97,13 @@ function init_leap() {
         //  }else if(leap_screen_x > document_width){
         //    leap_screen_x = document_width - 100;
         //  }
-        
+
         if(local_gain_value <= 0.1){
-          $("#note").html("Your volume is low, try moving finger forward to increase volume.").show();
+         $("#note").html("Your volume is low, try moving finger forward to increase volume.").show();
         }else if(leap_screen_y < 0){
-         $("#note").html("Your finger is out of range, please move down.").show();
+         $("#note").html("Your finger is out of range, please move your finger down.").show();
         }else if(leap_screen_y > document_height){
-         $("#note").html("Your finger is out of range, please move up.").show();
+         $("#note").html("Your finger is out of range, please move your finger up.").show();
         }else{
          $("#note").fadeOut();
         }
@@ -124,6 +124,8 @@ function init_leap() {
         leap_x_previous = leap_x;
         leap_screen_y_previous = leap_y;
       }
+    }else{
+      if(!cat_selection) $("#note").html("We can't detect your finger, try moving your finger closer to the unit.").show();
     }
   };
   

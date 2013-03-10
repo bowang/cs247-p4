@@ -136,7 +136,7 @@ function draw() {
                 other_player_info[id].mousedown,
                 other_player_info[id].c,
                 make_note(),
-                Math.random());
+                Math.random()*other_player_info[id].g);
         }
     }
 

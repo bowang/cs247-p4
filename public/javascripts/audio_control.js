@@ -168,7 +168,6 @@ function attach_mouse_events(){
     mouse_doc_y = e.pageY;
     $("#my_circle").css({top:mouse_doc_y-10,left:mouse_doc_x-10});
     socket.emit('user-motion', {id:my_id,x:mouse_doc_x,y:mouse_doc_y,c:local_sound_choice,g:local_gain_value,a:my_cat});
-    // socket.emit('user-select-cat', {id:my_id,x:mouse_doc_x,y:mouse_doc_y,c:local_sound_choice,g:local_gain_value,a:my_cat});
   });
   $(document).mousedown(function(e){
     console.log("mouse down");

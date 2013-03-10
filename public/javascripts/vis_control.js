@@ -123,25 +123,29 @@ function draw() {
     if(cat_selection) return;
     var rand = Math.random();
     if(rand > 0.5){
-        add_note(mouse_doc_x - $(canvas).position().left,
-            mouse_doc_y - $(canvas).position().top,
-            note_r * (Math.random() + 0.5),
-            mouse_down||leap_trigger,
-            local_sound_choice,
-            make_note(),
-            Math.random()*local_gain_value);
+        if(mouse_down||leap_trigger){ // perf improvement
+            add_note(mouse_doc_x - $(canvas).position().left,
+                mouse_doc_y - $(canvas).position().top,
+                note_r * (Math.random() + 0.5),
+                mouse_down||leap_trigger,
+                local_sound_choice,
+                make_note(),
+                Math.random()*local_gain_value);
+        }
     }
 
     for (var id in other_player_info) {
-        var rand = Math.random();
-        if(rand > 0.5){
-            add_note(other_player_info[id].x,
-                other_player_info[id].y,
-                note_r * (Math.random() + 0.5),
-                other_player_info[id].mousedown,
-                other_player_info[id].c,
-                make_note(),
-                Math.random()*other_player_info[id].g);
+        if(other_player_info[id].mousedown){ // perf inprovement
+            var rand = Math.random();
+            if(rand > 0.5){
+                add_note(other_player_info[id].x,
+                    other_player_info[id].y,
+                    note_r * (Math.random() + 0.5),
+                    other_player_info[id].mousedown,
+                    other_player_info[id].c,
+                    make_note(),
+                    Math.random()*other_player_info[id].g);
+            }
         }
     }
 
@@ -199,6 +203,9 @@ function remove_note(note) {
 }
 
 function draw_and_update_notes(note) {
+    if (note.x < -40) {
+        remove_note(note);
+    }
     if(note.filled){
         ctx.globalAlpha = note.a;
         ctx.fillStyle = note.color;
@@ -218,9 +225,6 @@ function draw_and_update_notes(note) {
         note.y += note.y_speed;
     }else{
         note.y -= note.y_speed;
-    }
-    if (note.x < -100) {
-        remove_note(note);
     }
 }
 

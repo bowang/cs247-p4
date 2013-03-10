@@ -124,7 +124,7 @@ function draw() {
     var rand = Math.random();
     var threshold = 0.9;
     if(mouse_down||leap_trigger){
-        threshold = 0.7;
+        threshold = 0.6;
     }
     if(rand > threshold){
         add_note(mouse_doc_x - $(canvas).position().left,
@@ -139,7 +139,7 @@ function draw() {
     for (var id in other_player_info) {
         var threshold = 0.9;
         if(other_player_info[id].mousedown){ // perf inprovement
-            threshold = 0.7;
+            threshold = 0.6;
         }
         var rand = Math.random();
         if(rand > threshold){
@@ -173,7 +173,7 @@ function Note(x, y, r, filled, color_id,text,alpha) {
     this.color = colors[color_id];
     this.stroke = color_strokes[color_id];
     this.filled = filled;
-    this.y_speed = Math.random()/4;
+    this.y_speed = Math.random()/3;
     if(Math.random() > 0.5){
         this.up = true;
     }else{

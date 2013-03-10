@@ -19,7 +19,6 @@ var message_rate = 5;
 var allow_instrument_switch = true;
 var sel_timeout;
 var cat_selection = true;
-var cat_selection_previous;
 
 // Support both the WebSocket and MozWebSocket objects
 if ((typeof(WebSocket) == 'undefined') &&
@@ -28,13 +27,13 @@ if ((typeof(WebSocket) == 'undefined') &&
 }
 
 $(document).ready(function(){
-  leap_screen_x = $(document).width() * 0.8 - Math.random()*200;
+  leap_screen_x = $(document).width() * 0.85 - Math.random()*200;
 })
 // Create the socket with event handlers and also feed in leap_screen_y to control the sound
 function init_leap() {
   //Create and open the socket
   ws = new WebSocket("ws://localhost:6437/");
-  
+
   // On successful connection
   ws.onopen = function(event) {
     document.getElementById("leap_connection").innerHTML = "LEAP: WebSocket connection open!";
@@ -52,8 +51,6 @@ function init_leap() {
          var tip = obj.pointables[0].tipPosition;
          leap_x = tip[0];
          var cat_sel = Math.floor((leap_x*1.5+100)/cats.length);
-         if(cat_selection_previous != cat_sel) count_down_val = 5;
-         cat_selection_previous = cat_sel;
          my_cat_flow.moveTo(cat_sel);
       }else{
         $("#leap_circle").show();
@@ -66,15 +63,13 @@ function init_leap() {
 
         if(obj.pointables.length == 5){
           leap_x = (obj.pointables[0].tipPosition[0]+obj.pointables[1].tipPosition[0]+obj.pointables[2].tipPosition[0]+obj.pointables[3].tipPosition[0]+obj.pointables[4].tipPosition[0])/5;
-          console.log("Enter selection mode");
-            show_sel_arrow();
+            //console.log("Enter selection mode");
             leap_select_sound(leap_x);
-            $("#instrument_switch").css({"background":colors[local_sound_choice]});
-            $("#instrument_switch").text(local_sound_choice+1).show();
+            $("#instrument_switch").css({"background":colors[local_sound_choice]}).show();
+            $("#instrument_switch img").attr("src","images/instruments/instrument_"+parseInt(local_sound_choice+1) + ".png");
           return;
         }else{
           $("#instrument_switch").fadeOut(200);
-          clear_sel_arrow();
         }
         // if(Math.abs(leap_x-leap_x_previous)>40 && allow_instrument_switch == true){
         //   //console.log("drastic horizontal movement: "+ (leap_x-leap_x_previous));
@@ -102,12 +97,16 @@ function init_leap() {
         //  }else if(leap_screen_x > document_width){
         //    leap_screen_x = document_width - 100;
         //  }
-
-         // if(leap_screen_y < -20){
-         //   leap_screen_y = -20;
-         // }else if(leap_screen_y > document_height){
-         //   leap_screen_y = document_height - 100;
-         // }
+        
+        if(local_gain_value <= 0.1){
+          $("#note").html("Your volume is low, try moving finger forward to increase volume.").show();
+        }else if(leap_screen_y < 0){
+         $("#note").html("Your finger is out of range, please move down.").show();
+        }else if(leap_screen_y > document_height){
+         $("#note").html("Your finger is out of range, please move up.").show();
+        }else{
+         $("#note").fadeOut();
+        }
 
         if(Math.abs(leap_screen_y_previous - leap_y) > 0.1){
           leap_move(); // fire move only when finger actually move
@@ -125,10 +124,33 @@ function init_leap() {
         leap_x_previous = leap_x;
         leap_screen_y_previous = leap_y;
       }
-    	
     }
   };
   
+  function leap_select_sound(x){
+    if(x>60){
+      local_sound_choice = 8;
+    }else if(x>45){
+      local_sound_choice = 7;
+    }else if(x>30){
+      local_sound_choice = 6;
+    }else if(x>15){
+      local_sound_choice = 5;
+    }else if(x>0){
+      local_sound_choice = 4;
+    }else if(x>-15){
+      local_sound_choice = 3;
+    }else if(x>-30){
+      local_sound_choice = 2;
+    }else if(x>-45){
+      local_sound_choice = 1;
+    }else{
+      local_sound_choice = 0;
+    }
+    $(".select_sound").removeClass("sel_highlighted");
+    $("#sound_"+(local_sound_choice+1)).addClass("sel_highlighted");
+}
+
   // On socket close
   ws.onclose = function(event) {
     ws = null;
@@ -141,11 +163,3 @@ function init_leap() {
   };
 }
 
-function clear_sel_arrow(){
-  $(".arrow").fadeOut(100);
-}
-
-function show_sel_arrow(){
-  $(".arrow").fadeOut(100);
-  $("#sound_"+(local_sound_choice+1)+" .arrow").show();
-}

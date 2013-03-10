@@ -70,32 +70,6 @@ function buffer_loading_finished(bufferList) {
   },beat_speed*bg_factor); 
 }
 
-function show_tutorial(){
-  $('img').mousedown(function(){return false});
-  var duration = 5000;
-  var time = duration;
-  $("#t1").fadeIn();
-  $("#progressbar").animate({"width":"350"},duration);
-  setTimeout(function(){
-    $("#progressbar").animate({"width":"0"},0);
-    $("#t1").hide();
-    $("#t2").fadeIn();
-    $("#progressbar").animate({"width":"350"},duration);
-  },time)
-  time += duration;
-  setTimeout(function(){
-    $("#progressbar").animate({"width":"0"},0);
-    $("#t2").hide();
-    $("#t3").fadeIn();
-    $("#progressbar").animate({"width":"350"},duration);
-  },time)
-  time += duration;
-  setTimeout(function(){
-    $("#progressbar").fadeOut();
-    $("#t3").fadeOut();
-  },time)
-}
-
 // play a particular sound clip with a playlist, and the index in the playlist
 function local_play(playlist,index){
   if(typeof local_buffer_player !== "undefined"){
@@ -188,7 +162,7 @@ function clear_local_sound_time_out(){
 function attach_mouse_events(){
   document_height = $(document).height();
   document_width = $(document).width();
-  mouse_doc_x = document_width * 0.8 - Math.random()*200;
+  mouse_doc_x = document_width * 0.85 - Math.random()*200;
   $(document).mousemove(function(e){
     //$('#status').html(e.pageX +', '+ e.pageY);
     mouse_doc_y = e.pageY;
@@ -265,30 +239,6 @@ function attach_key_events(){
 //     $(".select_sound").removeClass("sel_highlighted");
 //     $("#sound_"+(local_sound_choice+1)).addClass("sel_highlighted");
 // }
-
-function leap_select_sound(x){
-    if(x>60){
-      local_sound_choice = 8;
-    }else if(x>45){
-      local_sound_choice = 7;
-    }else if(x>30){
-      local_sound_choice = 6;
-    }else if(x>15){
-      local_sound_choice = 5;
-    }else if(x>0){
-      local_sound_choice = 4;
-    }else if(x>-15){
-      local_sound_choice = 3;
-    }else if(x>-30){
-      local_sound_choice = 2;
-    }else if(x>-45){
-      local_sound_choice = 1;
-    }else{
-      local_sound_choice = 0;
-    }
-    $(".select_sound").removeClass("sel_highlighted");
-    $("#sound_"+(local_sound_choice+1)).addClass("sel_highlighted");
-}
 
 // initialize web socket to listen to actions from other users
 function initialize_socket(){

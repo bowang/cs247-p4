@@ -14,20 +14,19 @@ head
 body
 	#my_circle.hide
 		.cat_img 
-			img(src="images/nyan.gif",width="200px")
+			img(src="images/nyan.gif",width="150px")
 	#leap_circle.hide
 		.cat_img 
-			img(src="images/nyan.gif",width="200px")
+			img(src="images/nyan.gif",width="150px")
 		.hide.tutorial_img
-			img(src="images/point.png",width="500px",style="margin-left:100px;margin-top:-80px")
-	canvas#canvas(width="400px",height="400px")
-
-	#control
+			img(src="",width="500px",style="margin-left:100px;margin-top:-80px")
+	canvas#canvas
+	#control.hide
 		#select_sound
 			#sound_1.select_sound
 				img(src="images/instruments/instrument_1.png",width="45px")
 				.arrow
-			#sound_2.select_sound
+			#sound_2.sel_highlighted.select_sound
 				img(src="images/instruments/instrument_2.png",width="45px")
 				.arrow
 			#sound_3.select_sound
@@ -36,7 +35,7 @@ body
 			#sound_4.select_sound
 				img(src="images/instruments/instrument_4.png",width="45px")
 				.arrow
-			#sound_5.sel_highlighted.select_sound
+			#sound_5.select_sound
 				img(src="images/instruments/instrument_5.png",width="45px")
 				.arrow
 			#sound_6.select_sound
@@ -51,9 +50,18 @@ body
 			#sound_9.select_sound
 				img(src="images/instruments/instrument_9.png",width="45px")
 				.arrow
+	#cat_select.ContentFlow
+		.loadIndicator
+			.indicator
+		.flow
+		.globalCaption
 	#loading loading ...
-		#loading_text
-	#instrument_switch.hide 0
+	#note This app is designed for Leap Motion and is compatible with mouse. 
+		br 
+		| For project information, please visit 
+		a(href="http://stanford.edu/~borui/gesture/index.html",target="_blank") our project page
+	#instrument_switch.hide 
+		img(src="")
 	#tutorial.hide
 		#progressbar
 		#t1.img.hide 
@@ -62,11 +70,6 @@ body
 			img(src="images/instruction2.gif")
 		#t3.img.hide 
 			img(src="images/instruction3.gif")
-	#cat_select.ContentFlow
-		.loadIndicator
-			.indicator
-		.flow
-		.globalCaption
 	#count_down 
 	#leap_connection.hide
 	#leap_status

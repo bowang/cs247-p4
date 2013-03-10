@@ -9,28 +9,28 @@ var clouds = new Array();
 var colors = ["#ff0000","#ff5a00","#ffbf00","#edf921","#46da00","#00b3da","#216af9","#6721f9","#d021f9"];
 var color_strokes = ["#ff4444","#ff5a44","#ffbf44","#ffbf00","#46da88","#00b388","#216a88","#672188","#d02188"];
 var cats = [
-        ["cat.gif",-50]
-        // ["GBG.gif",-50],
-        // ["GBauthentic.gif",-50],
-        // ["america.gif",-50],
-        // ["bday.gif",-130],
-        // ["easter.gif",-50],
-        // ["fat.gif",-50],
-        // ["ganja.gif",-50],
-        // ["j5.gif",-50],
-        // ["jazz.gif",-50],
-        // ["melon.gif",-50],
-        // ["mexinyan.gif",-60],
-        // ["mummy.gif",-50],
-        // ["newyear.gif",-50],
-        // ["nyaninja.gif",-40],
-        // ["patty.gif",-110],
-        // ["pikanyan.gif",-50],
-        // ["pumpkin.gif",-50],
-        // ["sad.gif",-50],
-        // ["smurf.gif",-50],
-        // ["vday.gif",-50],
-        // ["xmas.gif",-50]
+        //["cat.gif",-50]
+        ["GBG.gif",-50],
+        ["GBauthentic.gif",-50],
+        ["america.gif",-50],
+        ["bday.gif",-130],
+        ["easter.gif",-50],
+        ["fat.gif",-50],
+        ["ganja.gif",-50],
+        ["j5.gif",-50],
+        ["jazz.gif",-50],
+        ["melon.gif",-50],
+        ["mexinyan.gif",-60],
+        ["mummy.gif",-50],
+        ["newyear.gif",-50],
+        ["nyaninja.gif",-40],
+        ["patty.gif",-110],
+        ["pikanyan.gif",-50],
+        ["pumpkin.gif",-50],
+        ["sad.gif",-50],
+        ["smurf.gif",-50],
+        ["vday.gif",-50],
+        ["xmas.gif",-50]
 ];
 var count_down_interval;
 var count_down_val = 5;
@@ -115,6 +115,7 @@ function draw() {
     ctx.drawImage(bg_grass_1, grass_3_x+grass_width, h-40,grass_width,60);
 
     // generate note
+    if(cat_selection) return;
     var rand = Math.random();
     if(rand > 0.5){
         add_note(mouse_doc_x - $(canvas).position().left,
@@ -236,22 +237,44 @@ function make_note(){
     return text;
 }
 
-function show_cat_select(){
-    my_cat_flow = new ContentFlow('cat_select', {});
-    for (cat in cats) {
-        $('.ContentFlow .flow').append('<img class="item" href="javascript:cat_selected()" src="/images/cats/' + cats[cat][0] + '"/>');
-    }
-    setTimeout(function(){start_count_down();},2000);
+function show_tutorial(){
+  $("#tutorial").show();
+  var duration = 5000;
+  var time = duration;
+  $("#t1").fadeIn();
+  $("#progressbar").animate({"width":"350"},duration);
+  setTimeout(function(){
+    $("#progressbar").animate({"width":"0"},0);
+    $("#t1").hide();
+    $("#t2").fadeIn();
+    $("#progressbar").animate({"width":"350"},duration);
+  },time)
+  time += duration;
+  setTimeout(function(){
+    $("#progressbar").animate({"width":"0"},0);
+    $("#t2").hide();
+    $("#t3").fadeIn();
+    $("#progressbar").animate({"width":"350"},duration);
+  },time)
+  time += duration;
+  setTimeout(function(){
+    $("#progressbar").fadeOut();
+    $("#t3").fadeOut();
+    $("#tutorial").fadeOut();
+    ready_to_start();
+  },time)
 }
 
-function cat_selected(){
+function ready_to_start(){
+    cat_selection = false;
     my_cat=get_active_cat();
+    $("#note").fadeOut();
+    $("#control").fadeIn();
     $(".cat_img img").attr("src","images/cats/"+cats[my_cat][0]);
     $(".cat_img img").css("margin-top",cats[my_cat][1]+"px");
     $("#cat_select").hide();
     $("#loading").fadeOut();
     $("#my_circle").show();
-    // show_tutorial();
     // tutorial_img_interval = setInterval(function(){
     //     $(".tutorial_img").hide().fadeIn(600);
     // },600);
@@ -262,16 +285,12 @@ function cat_selected(){
     start_log();
 }
 
-function start_count_down(){
-  count_down_interval = setInterval(function(){
-    $("#loading").html("Choose a cat [" + count_down_val+"]");
-    count_down_val -= 1;
-    if(count_down_val == -1){
-      clearInterval(count_down_interval);
-      cat_selected();
-      cat_selection = false;
+function show_cat_select(){
+    my_cat_flow = new ContentFlow('cat_select', {});
+    for (cat in cats) {
+        $('.ContentFlow .flow').append('<img class="item" href="javascript:ready_to_start()" src="/images/cats/' + cats[cat][0] + '"/>');
     }
-  },900);
+    $("#loading").html("Please choose a cat to start");
 }
 
 function get_active_cat(){

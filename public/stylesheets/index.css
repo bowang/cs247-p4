@@ -20,15 +20,13 @@ body{
     -ms-user-select: none;
     user-select: none;
 }
-#canvas{
-	background: #191919;
-}
 #my_circle{
     width: 16px;
     height: 16px;
     position: fixed;
     background: none;
     border-radius: 8px;
+    z-index: 500;
     top:0;
     left: 0;
 }
@@ -38,6 +36,7 @@ body{
     position: fixed;
     background: none;
     border-radius: 8px;
+    z-index: 500;
     top:0;
     left: 0;
 }
@@ -52,6 +51,12 @@ body{
 }
 .other_circle img{
 	margin-top: -25px;
+}
+#canvas{
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	top:0;
 }
 #select_sound{
 	margin: 20 auto;
@@ -68,20 +73,45 @@ body{
 #loading{
 	position: fixed;
 	top:0;
-	padding-top: 60px;
+	padding-top: 120px;
 	width: 100%;
 	height: 100%;
-	background: rgba(0,0,0,1);
+/*	background: rgba(100,140,30,0.8);*/
 	z-index: 100;
-	font-size: 100px;
+	font-size: 28px;
 	text-align: center;
-	color: white;
+	color: #292929;
+background: -moz-radial-gradient(center, ellipse cover,  rgba(222,239,255,0.55) 0%, rgba(103,166,219,0.73) 100%); /* FF3.6+ */
+background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,rgba(222,239,255,0.55)), color-stop(100%,rgba(103,166,219,0.73))); /* Chrome,Safari4+ */
+background: -webkit-radial-gradient(center, ellipse cover,  rgba(222,239,255,0.55) 0%,rgba(103,166,219,0.73) 100%); /* Chrome10+,Safari5.1+ */
+background: -o-radial-gradient(center, ellipse cover,  rgba(222,239,255,0.55) 0%,rgba(103,166,219,0.73) 100%); /* Opera 12+ */
+background: -ms-radial-gradient(center, ellipse cover,  rgba(222,239,255,0.55) 0%,rgba(103,166,219,0.73) 100%); /* IE10+ */
+background: radial-gradient(ellipse at center,  rgba(222,239,255,0.55) 0%,rgba(103,166,219,0.73) 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#8cdeefff', endColorstr='#ba67a6db',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 }
-#loading_text{
-	position: absolute;
-	height: 100px;
-	margin: -80px auto 0 100px;
+#note{
+	position: fixed;
+	bottom: 150px;
+	margin: 0 auto;
+	width: 100%;
+	text-align: center;
+	color: #292929;
+	font-size: 18px;
+	z-index: 500;
+}
+a{
+	color: rgb(40,40,160);
+	text-decoration: none;
+}
+a:hover{
+	color: rgb(0,0,160);
+}
+#cat_select{
+	z-index: 300;
+	width: 700px;
+	height: 300px;
 	top:50%;
+	margin: -120px auto 0 auto;
 }
 .select_sound{
 	padding: 5px;
@@ -125,7 +155,7 @@ body{
 	width: 200px;
     height: 200px;
     position: fixed;
-    background: rgba(0,0,255,0.4);
+    background: rgba(0,0,255,0.6);
     border-radius: 200px;
     top:50%;
     left: 50%;
@@ -137,6 +167,9 @@ body{
     opacity: 0.6;
     line-height: 180px;
 }
+#instrument_switch img{
+	margin-top: 50px;
+}
 .arrow{
 	position: absolute;
 	height: 5px;
@@ -146,11 +179,4 @@ body{
 	margin-left: 35px;
 	display: none;
 	margin-top: 15px;
-}
-#cat_select{
-	position: fixed;
-	z-index: 300;
-	width: 100%;
-	height: 100%;
-	top: 200;
 }

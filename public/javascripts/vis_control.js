@@ -1,9 +1,9 @@
 var ctx;
 var canvas;
-var refresh_interval = 15;
+var refresh_interval = 20;
 var circle_r = 5;
 var note_r = 60;
-var note_speed_x = 3;
+var note_speed_x = 4;
 var notes = new Array();
 var clouds = new Array();
 var colors = ["#ff0000","#ff5a00","#ffbf00","#edf921","#46da00","#00b3da","#216af9","#6721f9","#d021f9"];
@@ -122,31 +122,36 @@ function draw() {
     // generate note
     if(cat_selection) return;
     var rand = Math.random();
-    if(rand > 0.7){
-        if(mouse_down||leap_trigger){ // perf improvement
-            add_note(mouse_doc_x - $(canvas).position().left,
-                mouse_doc_y - $(canvas).position().top,
-                note_r * (Math.random() + 0.5),
-                mouse_down||leap_trigger,
-                local_sound_choice,
-                make_note(),
-                Math.random()*local_gain_value);
-        }
+    var threshold = 0.9;
+    if(mouse_down||leap_trigger){
+        threshold = 0.7;
+    }
+    if(rand > threshold){
+        add_note(mouse_doc_x - $(canvas).position().left,
+        mouse_doc_y - $(canvas).position().top,
+        note_r * (Math.random() + 0.5),
+        mouse_down||leap_trigger,
+        local_sound_choice,
+        make_note(),
+        Math.random()*local_gain_value);
     }
 
     for (var id in other_player_info) {
+        var threshold = 0.9;
         if(other_player_info[id].mousedown){ // perf inprovement
-            var rand = Math.random();
-            if(rand > 0.7){
-                add_note(other_player_info[id].x,
-                    other_player_info[id].y,
-                    note_r * (Math.random() + 0.5),
-                    other_player_info[id].mousedown,
-                    other_player_info[id].c,
-                    make_note(),
-                    Math.random()*other_player_info[id].g);
-            }
+            threshold = 0.7;
         }
+        var rand = Math.random();
+        if(rand > threshold){
+            add_note(other_player_info[id].x,
+                other_player_info[id].y,
+                note_r * (Math.random() + 0.5),
+                other_player_info[id].mousedown,
+                other_player_info[id].c,
+                make_note(),
+                Math.random()*other_player_info[id].g);
+        }
+        
     }
 
     for (i = 0; i < clouds.length; i++) {
@@ -168,7 +173,7 @@ function Note(x, y, r, filled, color_id,text,alpha) {
     this.color = colors[color_id];
     this.stroke = color_strokes[color_id];
     this.filled = filled;
-    this.y_speed = Math.random()/2;
+    this.y_speed = Math.random()/4;
     if(Math.random() > 0.5){
         this.up = true;
     }else{
@@ -212,8 +217,8 @@ function draw_and_update_notes(note) {
         ctx.strokeStyle = note.stroke;
     }else{
         ctx.globalAlpha = note.a * 0.5;
-        ctx.fillStyle = "#fff";
-        ctx.strokeStyle = "#fff";
+        ctx.fillStyle = "#DDD";
+        ctx.strokeStyle = "#DDD";
     }
     ctx.font = 'italic bold '+ note.r+'px Notes';
     ctx.textBaseline = 'middle';

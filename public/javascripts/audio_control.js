@@ -9,7 +9,7 @@ var local_buffer_player;
 /* buffer player for background beats */
 var background_buffer_player;
 var local_sound_interval_timeout;
-var local_sound_choice = 4;
+var local_sound_choice = 1;
 var local_gain_node;
 /* the volume of local sound */
 var local_gain_value = 1;
@@ -188,9 +188,9 @@ function clear_local_sound_time_out(){
 function attach_mouse_events(){
   document_height = $(document).height();
   document_width = $(document).width();
+  mouse_doc_x = document_width * 0.8 - Math.random()*200;
   $(document).mousemove(function(e){
     //$('#status').html(e.pageX +', '+ e.pageY);
-    mouse_doc_x = e.pageX;
     mouse_doc_y = e.pageY;
     $("#my_circle").css({top:mouse_doc_y-10,left:mouse_doc_x-10});
     socket.emit('user-motion', {id:my_id,x:mouse_doc_x,y:mouse_doc_y,c:local_sound_choice,g:local_gain_value,a:my_cat});
@@ -239,6 +239,7 @@ function attach_key_events(){
       local_sound_choice = e.which - 49;
       $("#sound_"+(local_sound_choice+1)).addClass("sel_highlighted");
     }else if(e.which == 76){
+      stop_canvas = true;
       d_log(); // output log
     }else if(e.which == 72){
       emotion = "H";

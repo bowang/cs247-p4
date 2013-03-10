@@ -28,7 +28,7 @@ if ((typeof(WebSocket) == 'undefined') &&
 }
 
 $(document).ready(function(){
-  leap_screen_x = $(document).width()/2;
+  leap_screen_x = $(document).width() * 0.8 - Math.random()*200;
 })
 // Create the socket with event handlers and also feed in leap_screen_y to control the sound
 function init_leap() {
@@ -43,9 +43,9 @@ function init_leap() {
   // On message received
   ws.onmessage = function(event) {
   	// we do not want to listen so frequently to leap, so let's only listen every few seconds
-    message_counter += 1;
+    // message_counter += 1;
     // we only sample using a fixed rate from leap's socket server to reduce computation cost
-    if(message_counter % message_rate !=0) return;
+    // if(message_counter % message_rate !=0) return;
     var obj = JSON.parse(event.data);
     if(typeof obj.pointables !== "undefined" && typeof obj.pointables[0] !== "undefined"){
       if(cat_selection){
@@ -55,7 +55,6 @@ function init_leap() {
          if(cat_selection_previous != cat_sel) count_down_val = 5;
          cat_selection_previous = cat_sel;
          my_cat_flow.moveTo(cat_sel);
-
       }else{
         $("#leap_circle").show();
         $("#my_circle").hide();
@@ -104,11 +103,11 @@ function init_leap() {
         //    leap_screen_x = document_width - 100;
         //  }
 
-         if(leap_screen_y < 50){
-           leap_screen_y = 50;
-         }else if(leap_screen_y > document_height){
-           leap_screen_y = document_height - 100;
-         }
+         // if(leap_screen_y < -20){
+         //   leap_screen_y = -20;
+         // }else if(leap_screen_y > document_height){
+         //   leap_screen_y = document_height - 100;
+         // }
 
         if(Math.abs(leap_screen_y_previous - leap_y) > 0.1){
           leap_move(); // fire move only when finger actually move

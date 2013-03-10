@@ -1,167 +1,120 @@
 var ctx;
 var canvas;
-var refresh_interval = 20;
-var line_num = 16 - 1;
-var circle_speed_x = 10;
+var refresh_interval = 15;
 var circle_r = 5;
 var note_r = 60;
-var note_speed_x = 8;
-var circles = new Array();
+var note_speed_x = 3;
 var notes = new Array();
-var colors = ["#ff5a57","#ff8d43","#fcf777","#e7fc7a","#a1fb96","#7ef1d7","#95daff","#beceff","#e6c3ff"];
+var clouds = new Array();
+var colors = ["#ff0000","#ff5a00","#ffbf00","#edf921","#46da00","#00b3da","#216af9","#6721f9","#d021f9"];
+var color_strokes = ["#ff4444","#ff5a44","#ffbf44","#ffbf00","#46da88","#00b388","#216a88","#672188","#d02188"];
 var cats = [
-        ["GBG.gif",-50],
-        ["GBauthentic.gif",-50],
-        ["america.gif",-50],
-        ["bday.gif",-130],
-        ["easter.gif",-50],
-        ["fat.gif",-50],
-        ["ganja.gif",-50],
-        ["j5.gif",-50],
-        ["jazz.gif",-50],
-        ["melon.gif",-50],
-        ["mexinyan.gif",-60],
-        ["mummy.gif",-50],
-        ["newyear.gif",-50],
-        ["nyaninja.gif",-40],
-        ["patty.gif",-110],
-        ["pikanyan.gif",-50],
-        ["pumpkin.gif",-50],
-        ["sad.gif",-50],
-        ["smurf.gif",-50],
-        ["vday.gif",-50],
-        ["xmas.gif",-50]
+        ["cat.gif",-50]
+        // ["GBG.gif",-50],
+        // ["GBauthentic.gif",-50],
+        // ["america.gif",-50],
+        // ["bday.gif",-130],
+        // ["easter.gif",-50],
+        // ["fat.gif",-50],
+        // ["ganja.gif",-50],
+        // ["j5.gif",-50],
+        // ["jazz.gif",-50],
+        // ["melon.gif",-50],
+        // ["mexinyan.gif",-60],
+        // ["mummy.gif",-50],
+        // ["newyear.gif",-50],
+        // ["nyaninja.gif",-40],
+        // ["patty.gif",-110],
+        // ["pikanyan.gif",-50],
+        // ["pumpkin.gif",-50],
+        // ["sad.gif",-50],
+        // ["smurf.gif",-50],
+        // ["vday.gif",-50],
+        // ["xmas.gif",-50]
 ];
 var count_down_interval;
 var count_down_val = 5;
 var tutorial_img_interval;
-
-var bg_colors = gen_gradient("2c2c2d","464f71"); //["#141415","#1b1b1d","#1d1e21","#202025","#232428","#25262b","#28292f","#2b2c34","#2d2f37","#32353f","#393d4d","#3b4155","#424861","#444c68","#485173"," #4a547a"];
-var bg_color_num = bg_colors.length;
 var my_cat_flow;
 var my_cat;
-var bg_img;
-
-// function Circle(x, y, r, filled, color_id) {
-//     this.x = x;
-//     this.y = y;
-//     this.r = r;
-//     this.color = colors[color_id];
-//     this.filled = filled;
-// }
-
-// function add_circle(x, y, r, fill, color_id) {
-//     var circle = new Circle(x, y, r, fill, color_id);
-//     circles.push(circle);
-// }
-
-
-// function add_circles(x, y, n) {
-//     add_circle(x, y, circle_r * (Math.random() + 0.5));
-//     for (i = 1; i < n; i++) {
-//         setTimeout(function(){
-//             add_circle(x, y, circle_r * (Math.random() + 0.5));
-//         }, refresh_interval * i);
-//     }
-// }
-
-// function remove_circle(circle) {
-//     var index = circles.indexOf(circle);
-//     if (index >= 0) {
-//         circles.splice(index, 1);
-//     }
-//     else {
-//         console.log("failed to find circle");
-//         console.log(circle);
-//     }
-// }
+var bg_img, bg_sun, bg_grass_1, bg_grass_2, bg_grass_3;
+var grass_1_x = grass_2_x = grass_3_x = 0;
+var grass_1_speed = 0.7; 
+var grass_2_speed = 0.3;
+var grass_3_speed = 0.4;
+var grass_width = 2000;
+var stop_canvas = false;
+var sun_rotation = 0;
 
 function init_vis_canvas() {
-//    for (i = 1; i <= 9; i++) {
-//        $('#sound_'+i).css('background', colors[i-1]);
-//    }
+    // init all background images
     bg_img = new Image();
     bg_img.src = "images/bg.jpg";
+    bg_sun = new Image();
+    bg_sun.src = "images/sun.png";
+    bg_grass_1 = new Image();
+    bg_grass_1.src = "images/grass_1.png";
+    bg_grass_2 = new Image();
+    bg_grass_2.src = "images/grass_2.png";
+    bg_grass_3 = new Image();
+    bg_grass_3.src = "images/grass_3.png";
+    // init the cloud
+    for(var i = 0 ; i< 12 ; i++){
+        var img = new Image();;
+        img.src = "images/cloud_1.png";
+        clouds.push(new Cloud(
+            Math.random()*$(window).width()*2,
+            getRandomInt(90,300),
+            getRandomInt(80,150),
+            getRandomInt(50,90),
+            img,
+            getRandomFloat(0.6,1),
+            getRandomFloat(0.3,0.8)
+        ));
+    }
+
     canvas = document.getElementById('canvas');
     if (canvas.getContext) {
         $(canvas).attr("width",$(window).width());
         $(canvas).attr("height",$(window).height() - $(canvas).position().top);
         ctx = canvas.getContext("2d");
-        ctx.translate(0.5, 0.5);
         setInterval(draw, refresh_interval);
     }
     show_cat_select();
-    
-    
 }
-
-
-function draw_rect(y0,width,height,color){
-    ctx.fillStyle = color;
-    ctx.fillRect (0,y0,width,height);
-}
-
-function draw_line(x0, y0, x1, y1) {
-    ctx.lineWidth = 1;
-    ctx.strokeStyle = "black";
-    ctx.beginPath();
-    ctx.moveTo(x0, y0);
-    ctx.lineTo(x1, y1);
-    ctx.stroke();
-}
-
-// function draw_circle(circle) {
-//     ctx.lineWidth = 1;
-//     ctx.strokeStyle = circle.color;
-//     ctx.beginPath();
-//     ctx.arc(circle.x, circle.y, circle.r, 0, Math.PI*2, true);
-//     if (circle.filled) {
-//         ctx.fillStyle = circle.color;
-//         ctx.fill();
-//     }
-//     ctx.stroke();
-// }
-
-// function update_circle(circle) {
-//     circle.x -= circle_speed_x;
-//     if (circle.x < 0) {
-//         remove_circle(circle);
-//     }
-// }
 
 function draw() {
+    if(stop_canvas) return;
     var w = $(canvas).width();
     var h = $(canvas).height();
     ctx.clearRect(0, 0, w, h);
-    ctx.fillStyle = "#191919";
-    ctx.fillRect(0, 0, w, h);
     ctx.drawImage(bg_img, 0, 0,w,h);
-    // var gap = $(canvas).height() / bg_color_num-1 ;
-    // for(var i=0; i<bg_color_num; i++){
-    //     draw_rect(i*gap,$(window).width(),gap,bg_colors[bg_color_num-1-i]);
-    // }
-    // for (i = 0; i < line_num; i++) {
-    //     var y = (i+1) * gap;
-    //     draw_line(0, y, w, y);
-    // }
-    // add_circle(mouse_doc_x - $(canvas).position().left,
-    //     mouse_doc_y - $(canvas).position().top,
-    //     circle_r * (Math.random() + 0.5),
-    //     mouse_down||leap_trigger,
-    //     local_sound_choice);
 
-    // for (var id in other_player_info) {
-    //     add_circle(other_player_info[id].x,
-    //         other_player_info[id].y,
-    //         circle_r * (Math.random() + 0.5),
-    //         other_player_info[id].mousedown,
-    //         other_player_info[id].c);
-    // }
+    // draw the sun and the grass land
+    sun_rotation -= 0.0005;
+    ctx.rotate(sun_rotation);
+    ctx.drawImage(bg_sun, -400, -400,800,800);
+    ctx.rotate(-sun_rotation);
+    grass_1_x -= grass_1_speed;
+    grass_2_x -= grass_2_speed;
+    grass_3_x -= grass_3_speed;
+    if(grass_1_x <= - grass_width){
+        grass_1_x = 0;
+    }
+    if(grass_2_x <= - grass_width){
+        grass_2_x = 0;
+    }
+    if(grass_3_x <= - grass_width){
+        grass_3_x = 0;
+    }
+    ctx.drawImage(bg_grass_3, grass_1_x, h-60,grass_width,60);
+    ctx.drawImage(bg_grass_3, grass_1_x+grass_width, h-60,grass_width,60);
+    ctx.drawImage(bg_grass_2, grass_2_x, h-60,grass_width,60);
+    ctx.drawImage(bg_grass_2, grass_2_x+grass_width, h-60,grass_width,60);
+    ctx.drawImage(bg_grass_1, grass_3_x, h-40,grass_width,60);
+    ctx.drawImage(bg_grass_1, grass_3_x+grass_width, h-40,grass_width,60);
 
-    // for (i = 0; i < circles.length; i++) {
-    //     draw_circle(circles[i]);
-    //     update_circle(circles[i]);
-    // }
+    // generate note
     var rand = Math.random();
     if(rand > 0.5){
         add_note(mouse_doc_x - $(canvas).position().left,
@@ -174,26 +127,28 @@ function draw() {
     }
 
     for (var id in other_player_info) {
-        add_note(other_player_info[id].x,
-            other_player_info[id].y,
-            note_r * (Math.random() + 0.5),
-            other_player_info[id].mousedown,
-            other_player_info[id].c,
-            make_note(),
-            Math.random());
+        var rand = Math.random();
+        if(rand > 0.5){
+            add_note(other_player_info[id].x,
+                other_player_info[id].y,
+                note_r * (Math.random() + 0.5),
+                other_player_info[id].mousedown,
+                other_player_info[id].c,
+                make_note(),
+                Math.random());
+        }
+    }
+
+    for (i = 0; i < clouds.length; i++) {
+        draw_and_update_clouds(clouds[i]);
     }
 
     for (i = 0; i < notes.length; i++) {
-        draw_note(notes[i]);
-        update_note(notes[i]);
+        draw_and_update_notes(notes[i]);
     }
+
 }
 
-//*****************************
-//
-// Notes section
-//
-// r represent note size
 function Note(x, y, r, filled, color_id,text,alpha) {
     this.x = x;
     this.y = y;
@@ -201,7 +156,24 @@ function Note(x, y, r, filled, color_id,text,alpha) {
     this.t = text;
     this.a = alpha;
     this.color = colors[color_id];
+    this.stroke = color_strokes[color_id];
     this.filled = filled;
+    this.y_speed = Math.random()/2;
+    if(Math.random() > 0.5){
+        this.up = true;
+    }else{
+        this.up = false;
+    }   
+}
+
+function Cloud(x,y,w,h,image,alpha,speed){
+    this.x = x;
+    this.y = y;
+    this.w = w;
+    this.h = h;
+    this.image = image;
+    this.a = alpha;
+    this.speed = speed;
 }
 
 function add_note(x, y, r, fill, color_id,text,alpha) {
@@ -220,27 +192,40 @@ function remove_note(note) {
     }
 }
 
-function draw_note(note) {
-    
+function draw_and_update_notes(note) {
     if(note.filled){
         ctx.globalAlpha = note.a;
         ctx.fillStyle = note.color;
+        ctx.strokeStyle = note.stroke;
     }else{
         ctx.globalAlpha = note.a * 0.5;
-        ctx.fillStyle = "#666";
+        ctx.fillStyle = "#fff";
+        ctx.strokeStyle = "#fff";
     }
     ctx.font = 'italic bold '+ note.r+'px Notes';
     ctx.textBaseline = 'middle';
     ctx.fillText(note.t, note.x, note.y);
+    //ctx.strokeText(note.t, note.x, note.y);
     ctx.globalAlpha = 1.0;
-}
-
-function update_note(note) {
     note.x -= note_speed_x;
-    note.y += Math.round((0.5-Math.random())*2);
-    if (note.x < -30) {
+    if(note.up){
+        note.y += note.y_speed;
+    }else{
+        note.y -= note.y_speed;
+    }
+    if (note.x < -100) {
         remove_note(note);
     }
+}
+
+function draw_and_update_clouds(cloud){
+     ctx.globalAlpha = cloud.a;
+     ctx.drawImage(cloud.image, cloud.x, cloud.y,cloud.w,cloud.h);
+     cloud.x -= cloud.speed;
+        if (cloud.x < -200) {
+            cloud.x = $(window).width() + 200 * Math.random();
+        }  
+    ctx.globalAlpha = 1;   
 }
 
 function make_note(){
@@ -249,20 +234,6 @@ function make_note(){
     for( var i=0; i < 1; i++ )
         text += possible.charAt(Math.floor(Math.random() * possible.length));
     return text;
-}
-
-// helper functions
-function gen_gradient(c_a,c_b){
-    var numberOfItems = 16;
-    var rainbow = new Rainbow(); 
-    rainbow.setNumberRange(1, numberOfItems);
-    rainbow.setSpectrum(c_a, c_b);
-    var s = [];
-    for (var i = 1; i <= numberOfItems; i++) {
-        var hexColour = rainbow.colourAt(i);
-        s.push('#' + hexColour);
-    }
-    return s;
 }
 
 function show_cat_select(){
@@ -280,7 +251,7 @@ function cat_selected(){
     $("#cat_select").hide();
     $("#loading").fadeOut();
     $("#my_circle").show();
-    show_tutorial();
+    // show_tutorial();
     // tutorial_img_interval = setInterval(function(){
     //     $(".tutorial_img").hide().fadeIn(600);
     // },600);
@@ -313,3 +284,12 @@ function get_active_cat(){
     }
     return -1;
 }
+
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function getRandomFloat(min, max) {
+    return Math.random() * (max - min) + min;
+}
+

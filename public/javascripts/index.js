@@ -1,13 +1,19 @@
-var log = [];
-var log_interval_handle;
-var emotion = "U";
+
 $(document).ready(function(){
+	$('img').on('dragstart', function(event) { event.preventDefault(); });
     create_audio_context();
     init_vis_canvas();
     init_leap();
 });
 
+// LOGGING FACILITY
+
+var log = [];
+var log_interval_handle;
+var emotion = "U";
+
 function start_log(){
+	return;
 	// wait 5 seconds and start logging
 	setTimeout(function(){
 		console.log("Start logging..");
@@ -24,8 +30,7 @@ function start_log(){
 	},15000);
 }
 
-// fire this function in console or press shift and L for log
-
+// display_log fire this function in console or press shift and L for log
 function d_log(){
 	clearInterval(log_interval_handle);
 	window.open("data:text/json;charset=utf-8," + escape(JSON.stringify(log)));

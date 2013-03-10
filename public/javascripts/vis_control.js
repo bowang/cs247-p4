@@ -47,6 +47,11 @@ var stop_canvas = false;
 var sun_rotation = 0;
 
 function init_vis_canvas() {
+    $(".select_sound").click(function(){
+      $(".select_sound").removeClass("sel_highlighted");
+      local_sound_choice = this.id.split("_")[1] - 1;
+      $("#sound_"+(local_sound_choice+1)).addClass("sel_highlighted");
+    });
     // init all background images
     bg_img = new Image();
     bg_img.src = "images/bg.jpg";

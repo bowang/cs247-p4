@@ -10,27 +10,32 @@ var colors = ["#ff0000","#ff5a00","#ffbf00","#edf921","#46da00","#00b3da","#216a
 var color_strokes = ["#ff4444","#ff5a44","#ffbf44","#ffbf00","#46da88","#00b388","#216a88","#672188","#d02188"];
 var cats = [
         //["cat.gif",-50]
-        ["GBG.gif",-50],
-        ["GBauthentic.gif",-50],
-        ["america.gif",-50],
-        ["bday.gif",-130],
-        ["easter.gif",-50],
-        ["fat.gif",-50],
-        ["ganja.gif",-50],
-        ["j5.gif",-50],
-        ["jazz.gif",-50],
-        ["melon.gif",-50],
-        ["mexinyan.gif",-60],
-        ["mummy.gif",-50],
-        ["newyear.gif",-50],
-        ["nyaninja.gif",-40],
-        ["patty.gif",-110],
-        ["pikanyan.gif",-50],
-        ["pumpkin.gif",-50],
-        ["sad.gif",-50],
-        ["smurf.gif",-50],
-        ["vday.gif",-50],
-        ["xmas.gif",-50]
+        ["smurfcat.gif",-50],
+        ["luvcat.gif",-50],
+        ["rockcat.gif",-50],
+        ["nyancat.gif",-50],
+        ["codingcat.gif",-50]
+        // ["GBG.gif",-50],
+        // ["GBauthentic.gif",-50],
+        // ["america.gif",-50],
+        // ["bday.gif",-130],
+        // ["easter.gif",-50],
+        // ["fat.gif",-50],
+        // ["ganja.gif",-50],
+        // ["j5.gif",-50],
+        // ["jazz.gif",-50],
+        // ["melon.gif",-50],
+        // ["mexinyan.gif",-60],
+        // ["mummy.gif",-50],
+        // ["newyear.gif",-50],
+        // ["nyaninja.gif",-40],
+        // ["patty.gif",-110],
+        // ["pikanyan.gif",-50],
+        // ["pumpkin.gif",-50],
+        // ["sad.gif",-50],
+        // ["smurf.gif",-50],
+        // ["vday.gif",-50],
+        // ["xmas.gif",-50]
 ];
 var count_down_interval;
 var count_down_val = 5;

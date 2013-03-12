@@ -8,6 +8,7 @@ var ws;
 var leap_y = 0; // Leap motion's y coord
 var leap_x = 0; // Leap motion's x coord
 var leap_x_previous = leap_x;
+var leap_y_previous = leap_y;
 var leap_screen_y = 0;
 var leap_screen_x = 0;
 var leap_screen_y_previous = leap_screen_y;
@@ -19,6 +20,7 @@ var message_rate = 5;
 var allow_instrument_switch = true;
 var sel_timeout;
 var cat_selection = true;
+var cat_confirm_motion_ctr = 0;
 
 // Support both the WebSocket and MozWebSocket objects
 if ((typeof(WebSocket) == 'undefined') &&
@@ -50,8 +52,17 @@ function init_leap() {
       if(cat_selection){
          var tip = obj.pointables[0].tipPosition;
          leap_x = tip[0];
-         var cat_sel = Math.floor((leap_x*1.5+100)/cats.length);
+         leap_y = tip[1];
+         var cat_sel = Math.floor((leap_x*0.1+100)/cats.length);
          my_cat_flow.moveTo(cat_sel);
+         if(leap_y - leap_y_previous < -2){
+          cat_confirm_motion_ctr += 1;
+          console.log("swiped down");
+          if(cat_confirm_motion_ctr > 10){
+            ready_to_start();
+          }
+         }
+         leap_y_previous = leap_y;
       }else{
         $("#leap_circle").show();
         $("#my_circle").hide();

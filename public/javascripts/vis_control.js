@@ -52,11 +52,6 @@ var stop_canvas = false;
 var sun_rotation = 0;
 
 function init_vis_canvas() {
-    $(".select_sound").click(function(){
-      $(".select_sound").removeClass("sel_highlighted");
-      local_sound_choice = this.id.split("_")[1] - 1;
-      $("#sound_"+(local_sound_choice+1)).addClass("sel_highlighted");
-    });
     // init all background images
     bg_img = new Image();
     bg_img.src = "images/bg.jpg";
@@ -121,8 +116,8 @@ function draw() {
     ctx.drawImage(bg_grass_3, grass_1_x+grass_width, h-60,grass_width,60);
     ctx.drawImage(bg_grass_2, grass_2_x, h-60,grass_width,60);
     ctx.drawImage(bg_grass_2, grass_2_x+grass_width, h-60,grass_width,60);
-    ctx.drawImage(bg_grass_1, grass_3_x, h-40,grass_width,60);
-    ctx.drawImage(bg_grass_1, grass_3_x+grass_width, h-40,grass_width,60);
+    ctx.drawImage(bg_grass_1, grass_3_x, h-60,grass_width,80);
+    ctx.drawImage(bg_grass_1, grass_3_x+grass_width, h-60,grass_width,80);
 
     // generate note
     if(cat_selection) return;
@@ -256,34 +251,6 @@ function make_note(){
     return text;
 }
 
-function show_tutorial(){
-  $("#tutorial").show();
-  var duration = 5000;
-  var time = duration;
-  $("#t1").fadeIn();
-  $("#progressbar").animate({"width":"350"},duration);
-  setTimeout(function(){
-    $("#progressbar").animate({"width":"0"},0);
-    $("#t1").hide();
-    $("#t2").fadeIn();
-    $("#progressbar").animate({"width":"350"},duration);
-  },time)
-  time += duration;
-  setTimeout(function(){
-    $("#progressbar").animate({"width":"0"},0);
-    $("#t2").hide();
-    $("#t3").fadeIn();
-    $("#progressbar").animate({"width":"350"},duration);
-  },time)
-  time += duration;
-  setTimeout(function(){
-    $("#progressbar").fadeOut();
-    $("#t3").fadeOut();
-    $("#tutorial").fadeOut();
-    ready_to_start();
-  },time)
-}
-
 function ready_to_start(){
     cat_selection = false;
     my_cat=get_active_cat();
@@ -294,6 +261,12 @@ function ready_to_start(){
     $("#cat_select").hide();
     $("#loading").fadeOut();
     $("#my_circle").show();
+    $("#tutorial").hide();
+    $(".select_sound").click(function(){
+      $(".select_sound").removeClass("sel_highlighted");
+      local_sound_choice = this.id.split("_")[1] - 1;
+      $("#sound_"+(local_sound_choice+1)).addClass("sel_highlighted");
+    });
     // tutorial_img_interval = setInterval(function(){
     //     $(".tutorial_img").hide().fadeIn(600);
     // },600);
@@ -307,9 +280,9 @@ function ready_to_start(){
 function show_cat_select(){
     my_cat_flow = new ContentFlow('cat_select', {});
     for (cat in cats) {
-        $('.ContentFlow .flow').append('<img class="item" href="javascript:ready_to_start()" src="/images/cats/' + cats[cat][0] + '"/>');
+        $('.ContentFlow .flow').append('<img class="item" href="javascript:show_tutorial()" src="/images/cats/' + cats[cat][0] + '"/>');
     }
-    $("#loading").html("Please choose a cat to start");
+    $("#loading").html("Use one finger to choose a cat, press finger to continue.");
 }
 
 function get_active_cat(){

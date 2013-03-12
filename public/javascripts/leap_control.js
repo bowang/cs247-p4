@@ -20,7 +20,10 @@ var message_rate = 5;
 var allow_instrument_switch = true;
 var sel_timeout;
 var cat_selection = true;
-var cat_confirm_motion_ctr = 0;
+var next_tutorial = "show_tutorial()";
+var tutorial_started = false;
+var down_motion_counter = 0; // count the distance of pressing fingures
+var down_motion_stall = 0; // to help prevent multiple pressing down gestuer at the same time
 
 // Support both the WebSocket and MozWebSocket objects
 if ((typeof(WebSocket) == 'undefined') &&
@@ -53,15 +56,20 @@ function init_leap() {
          var tip = obj.pointables[0].tipPosition;
          leap_x = tip[0];
          leap_y = tip[1];
-         var cat_sel = Math.floor((leap_x*0.1+100)/cats.length);
-         my_cat_flow.moveTo(cat_sel);
-         if(leap_y - leap_y_previous < -2){
-          cat_confirm_motion_ctr += 1;
+         if(down_motion_stall >= 0 && leap_y - leap_y_previous < -2){
+          down_motion_counter += 1;
           console.log("swiped down");
-          if(cat_confirm_motion_ctr > 10){
-            ready_to_start();
-          }
          }
+         if(!tutorial_started){
+          var cat_sel = Math.floor((leap_x*0.1+100)/cats.length);
+          my_cat_flow.moveTo(cat_sel);
+        }
+         if(down_motion_counter > 5 ){
+            down_motion_counter = 0;
+            down_motion_stall = -30;
+            eval(next_tutorial);
+         }
+         down_motion_stall += 1;
          leap_y_previous = leap_y;
       }else{
         $("#leap_circle").show();
@@ -139,8 +147,53 @@ function init_leap() {
       if(!cat_selection) $("#note").html("We can't detect your finger, try moving your finger closer to the unit.").show();
     }
   };
-  
-  function leap_select_sound(x){
+
+  // On socket close
+  ws.onclose = function(event) {
+    ws = null;
+    document.getElementById("leap_connection").innerHTML = "LEAP: WebSocket connection closed";
+  }
+  //On socket error
+  ws.onerror = function(event) {
+    alert("LEAP: received error");
+  };
+}
+
+
+function show_tutorial(){
+  tutorial_started = true;
+  next_tutorial = "show_tutorial_2()";
+  $("#tutorial").show();
+  $("#loading").html("");
+  $("#note").html("Instruction 1/3 <br/> Press your finger to continue");
+  $("#cat_select").hide();
+  $("#t1").show();
+  $("#tutorial").click(function(){
+    show_tutorial_2();
+  });
+}
+
+function show_tutorial_2(){
+  next_tutorial = "show_tutorial_3()";
+    $("#t1").hide();
+    $("#t2").show();
+    $("#note").html("Instruction 2/3 <br/> Press your finger to continue");
+    $("#tutorial").unbind().click(function(){
+        show_tutorial_3();
+    });
+}
+
+function show_tutorial_3(){
+  next_tutorial = "ready_to_start()";
+    $("#t2").hide();
+    $("#t3").show();
+    $("#note").html("Instruction 3/3 <br/> Press your finger to continue");
+    $("#tutorial").unbind().click(function(){
+        ready_to_start();
+    });
+}
+
+function leap_select_sound(x){
     if(x>60){
       local_sound_choice = 8;
     }else if(x>45){
@@ -163,16 +216,3 @@ function init_leap() {
     $(".select_sound").removeClass("sel_highlighted");
     $("#sound_"+(local_sound_choice+1)).addClass("sel_highlighted");
 }
-
-  // On socket close
-  ws.onclose = function(event) {
-    ws = null;
-    document.getElementById("leap_connection").innerHTML = "LEAP: WebSocket connection closed";
-  }
-  
-  //On socket error
-  ws.onerror = function(event) {
-    alert("LEAP: received error");
-  };
-}
-

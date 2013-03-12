@@ -72,10 +72,10 @@ function buffer_loading_finished(bufferList) {
 
 // play a particular sound clip with a playlist, and the index in the playlist
 function local_play(playlist,index){
+  if(cat_selection) return; // disable sound when user is still in selection mode
   if(typeof local_buffer_player !== "undefined"){
     local_buffer_player.stop(0);
   }
-
   var compressor=ad_context.createDynamicsCompressor();
   local_buffer_player = ad_context.createBufferSource();
   local_buffer_player.buffer = playlist[index];
@@ -121,6 +121,7 @@ function play_background_beats(playlist,index){
 
 // play a particular sound clip for a remote player with a playlist, and the index in the playlist
 function remote_play(player_id, playlist,index,volume){
+  if(cat_selection) return; // disable sound when user is still in selection mode
   if(typeof other_player_info[player_id].player !== "undefined"){
     other_player_info[player_id].player.stop(0);
   }
@@ -244,7 +245,7 @@ function initialize_socket(){
   socket = io.connect('/game');
   socket.on('other-motion', function (data) {
     if($("#"+data.id).length == 0){
-      $("body").append("<div id='"+data.id+"' class='other_circle'><img src='images/nyan.gif' width='100px'></div>");
+      $("body").append("<div id='"+data.id+"' class='other_circle'><img src='' width='100px'></div>");
     }
 
     if(typeof other_player_info[data.id] === "undefined"){

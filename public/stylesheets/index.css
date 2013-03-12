@@ -133,11 +133,6 @@ a:hover{
 .hide{
 	display: none;
 }
-.img{
-	margin: 5 auto 0 auto;
-	width: 250px;
-	opacity: 0.8;
-}
 #progressbar{
 	margin: 95px auto 0 auto;
 	width: 0px;
@@ -151,10 +146,14 @@ a:hover{
 	height: 100%;
 	top: 0;
 }
-#tutorial img{
-	width: 340px;
+#tutorial .img{
+	margin: 5 auto 0 auto;
+	width: 500px;
 	height: auto;
 	border: 5px solid #000;
+}
+#tutorial img{
+	width: 500px;
 }
 #instrument_switch{
 	width: 200px;

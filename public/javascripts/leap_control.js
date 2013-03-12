@@ -64,9 +64,9 @@ function init_leap() {
           var cat_sel = Math.floor((leap_x*0.1+100)/cats.length);
           my_cat_flow.moveTo(cat_sel);
         }
-         if(down_motion_counter > 5 ){
+         if(down_motion_counter > 15 ){
             down_motion_counter = 0;
-            down_motion_stall = -30;
+            down_motion_stall = -40;
             eval(next_tutorial);
          }
          down_motion_stall += 1;
@@ -118,11 +118,11 @@ function init_leap() {
         //  }
 
         if(local_gain_value <= 0.1){
-         $("#note").html("Your volume is low, try moving finger forward to increase volume.").show();
+         $("#note").html("<span class='bigger'>Move finger forward to increase volume.</span>").show();
         }else if(leap_screen_y < 0){
-         $("#note").html("Your finger is out of range, please move your finger down.").show();
+         $("#note").html("<span class='bigger'>Move your finger down.</span>").show();
         }else if(leap_screen_y > document_height){
-         $("#note").html("Your finger is out of range, please move your finger up.").show();
+         $("#note").html("<span class='bigger'>Move your finger up.</span>").show();
         }else{
          $("#note").fadeOut();
         }
@@ -144,7 +144,7 @@ function init_leap() {
         leap_screen_y_previous = leap_y;
       }
     }else{
-      if(!cat_selection) $("#note").html("We can't detect your finger, try moving your finger closer to the unit.").show();
+      if(!cat_selection) $("#note").html("<span class='bigger'>Move your finger closer to LEAP.</span>").show();
     }
   };
 
@@ -165,7 +165,7 @@ function show_tutorial(){
   next_tutorial = "show_tutorial_2()";
   $("#tutorial").show();
   $("#loading").html("");
-  $("#note").html("Instruction 1/3 <br/> Press your finger to continue");
+  $("#note").html("Instruction 1/3 <br/><span class='bigger'> Swipe your finger down to continue</span>");
   $("#cat_select").hide();
   $("#t1").show();
   $("#tutorial").click(function(){
@@ -177,7 +177,7 @@ function show_tutorial_2(){
   next_tutorial = "show_tutorial_3()";
     $("#t1").hide();
     $("#t2").show();
-    $("#note").html("Instruction 2/3 <br/> Press your finger to continue");
+    $("#note").html("Instruction 2/3 <br/><span class='bigger'> Swipe your finger down to continue</span>");
     $("#tutorial").unbind().click(function(){
         show_tutorial_3();
     });
@@ -187,7 +187,7 @@ function show_tutorial_3(){
   next_tutorial = "ready_to_start()";
     $("#t2").hide();
     $("#t3").show();
-    $("#note").html("Instruction 3/3 <br/> Press your finger to continue");
+    $("#note").html("Instruction 3/3 <br/><span class='bigger'> Swipe your finger down to continue</span>");
     $("#tutorial").unbind().click(function(){
         ready_to_start();
     });

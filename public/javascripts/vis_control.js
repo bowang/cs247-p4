@@ -282,7 +282,7 @@ function show_cat_select(){
     for (cat in cats) {
         $('.ContentFlow .flow').append('<img class="item" href="javascript:show_tutorial()" src="/images/cats/' + cats[cat][0] + '"/>');
     }
-    $("#loading").html("Use one finger to choose a cat, press finger to continue.");
+    $("#loading").html("Use one finger to choose a cat, swipe finger down to continue.");
 }
 
 function get_active_cat(){

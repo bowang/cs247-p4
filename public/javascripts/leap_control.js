@@ -23,7 +23,7 @@ var cat_selection = true;
 var next_tutorial = "show_tutorial()";
 var tutorial_started = false;
 var down_motion_counter = 0; // count the distance of pressing fingures
-var down_motion_stall = 0; // to help prevent multiple pressing down gestuer at the same time
+var down_motion_stall = -40; // to help prevent multiple pressing down gestuer at the same time
 
 // Support both the WebSocket and MozWebSocket objects
 if ((typeof(WebSocket) == 'undefined') &&
@@ -63,7 +63,7 @@ function init_leap() {
          if(!tutorial_started){
           var cat_sel = Math.floor((leap_x*0.1+100)/cats.length);
           my_cat_flow.moveTo(cat_sel);
-        }
+         }
          if(down_motion_counter > 15 ){
             down_motion_counter = 0;
             down_motion_stall = -40;
